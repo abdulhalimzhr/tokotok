@@ -1,0 +1,100 @@
+@import 'tailwindcss';
+@import '@nuxt/ui';
+
+/* Custom styles for the TokoTok app */
+.line-clamp-2 {
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.line-clamp-3 {
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+/* Loading animations */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+.fade-in {
+  animation: fadeIn 0.3s ease-in-out;
+}
+
+/* Custom scrollbar */
+.custom-scrollbar::-webkit-scrollbar {
+  width: 6px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-track {
+  background: #f1f5f9;
+  border-radius: 3px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb {
+  background: #cbd5e1;
+  border-radius: 3px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb:hover {
+  background: #94a3b8;
+}
+
+input:-webkit-autofill,
+input:-webkit-autofill:focus {
+  transition: background-color 0s 600000s, color 0s 600000s !important;
+}
+
+
+@layer utilities {
+  input::selection,
+  textarea::selection {
+    background-color: #e5e7eb; /* Tailwind gray-200 */
+    color: black;
+  }
+  input::-webkit-input-placeholder,
+  textarea::-webkit-input-placeholder {
+    color: #9ca3af; /* Tailwind gray-400 */
+  }
+  input:-ms-input-placeholder,
+  textarea:-ms-input-placeholder {
+    color: #9ca3af; /* Tailwind gray-400 */
+  }
+  input::placeholder,
+  textarea::placeholder {
+    color: #9ca3af; /* Tailwind gray-400 */
+  }
+  input:focus::placeholder,
+  textarea:focus::placeholder {
+    color: #6b7280; /* Tailwind gray-600 */
+  }
+  input:disabled,
+  textarea:disabled {
+    background-color: #f3f4f6; /* Tailwind gray-200 */
+    color: #6b7280; /* Tailwind gray-600 */
+    cursor: not-allowed;
+  }
+  input:disabled::placeholder,
+  textarea:disabled::placeholder {
+    color: #9ca3af; /* Tailwind gray-400 */
+  }
+  input[type="number"]::-webkit-inner-spin-button,
+  input[type="number"]::-webkit-outer-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+  }
+  input[type="number"] {
+    -moz-appearance: textfield;
+  }
+}
