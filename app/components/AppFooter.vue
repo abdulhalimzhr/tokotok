@@ -18,8 +18,13 @@
           Fake Store API
         </a>
       </div>
-      <div class="flex items-center gap-4 w-full sm:w-auto justify-between sm:justify-end">
-        <span>&copy; {{ new Date().getFullYear() }} TokoTok. All rights reserved.</span>
+      <div
+        class="flex items-center gap-4 w-full sm:w-auto justify-between sm:justify-end"
+      >
+        <span
+          >&copy; {{ new Date().getFullYear() }} TokoTok. All rights
+          reserved.</span
+        >
         <button
           class="ml-4 flex items-center px-3 py-1 rounded bg-gray-200 dark:bg-gray-800 text-gray-700 dark:text-gray-200 border border-gray-300 dark:border-gray-700 hover:bg-gray-300 dark:hover:bg-gray-700 transition"
           @click="toggleDarkMode"
@@ -34,23 +39,23 @@
 </template>
 
 <script setup>
-import { ref, onMounted } from 'vue';
-const isDark = ref(false);
+import { ref, onMounted } from 'vue'
+const isDark = ref(false)
 const toggleDarkMode = () => {
-  isDark.value = !isDark.value;
+  isDark.value = !isDark.value
   if (isDark.value) {
-    document.documentElement.classList.add('dark');
-    localStorage.setItem('theme', 'dark');
+    document.documentElement.classList.add('dark')
+    localStorage.setItem('theme', 'dark')
   } else {
-    document.documentElement.classList.remove('dark');
-    localStorage.setItem('theme', 'light');
+    document.documentElement.classList.remove('dark')
+    localStorage.setItem('theme', 'light')
   }
-};
+}
 onMounted(() => {
-  const theme = localStorage.getItem('theme');
+  const theme = localStorage.getItem('theme')
   if (theme === 'dark') {
-    isDark.value = true;
-    document.documentElement.classList.add('dark');
+    isDark.value = true
+    document.documentElement.classList.add('dark')
   }
-});
+})
 </script>

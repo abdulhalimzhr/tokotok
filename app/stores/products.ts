@@ -18,7 +18,7 @@ export const useProductsStore = defineStore('products', () => {
   }
   const loading = ref(false)
   const error = ref<string | null>(null)
-  
+
   const searchState = ref<SearchState>({
     query: '',
     filters: {
@@ -30,21 +30,32 @@ export const useProductsStore = defineStore('products', () => {
     sortOrder: 'asc'
   })
 
-  const fetchProducts = async () => {
+  const fetchProducts = async (retryCount = 0) => {
     loading.value = true
     error.value = null
-    
+
     try {
       const data = await $fetch<Product[]>('/api/products')
       products.value = data
       filteredProducts.value = data
-      
+
       searchState.value.filters.category = ''
-      
+
       applyFilters()
     } catch (err) {
-      error.value = 'Failed to fetch products. Please try again.'
       console.error('Error fetching products:', err)
+
+      if (retryCount < 3) {
+        // Exponential backoff retry
+        const delay = Math.pow(2, retryCount) * 1000
+        setTimeout(() => {
+          fetchProducts(retryCount + 1)
+        }, delay)
+        error.value = `Failed to fetch products. Retrying... (${retryCount + 1}/3)`
+      } else {
+        error.value =
+          'Failed to fetch products after multiple attempts. Please check your connection and try again.'
+      }
     } finally {
       loading.value = false
     }
@@ -54,7 +65,7 @@ export const useProductsStore = defineStore('products', () => {
     try {
       const data = await $fetch<string[]>('/api/products/categories')
       categories.value = data
-      
+
       if (import.meta.client) {
         localStorage.setItem('categories', JSON.stringify(categories.value))
       }
@@ -69,12 +80,14 @@ export const useProductsStore = defineStore('products', () => {
   const fetchProductsByCategory = async (category: string) => {
     loading.value = true
     error.value = null
-    
+
     try {
-      const data = await $fetch<Product[]>(`/api/products/category/${encodeURIComponent(category)}`)
+      const data = await $fetch<Product[]>(
+        `/api/products/category/${encodeURIComponent(category)}`
+      )
       products.value = data
       filteredProducts.value = data
-      
+
       searchState.value.filters.category = category
       applyFilters()
     } catch (err) {
@@ -88,14 +101,14 @@ export const useProductsStore = defineStore('products', () => {
   const fetchProductById = async (id: number): Promise<Product | null> => {
     try {
       const data = await $fetch<Product>(`/api/products/${id}`)
-      
+
       const existingIndex = products.value.findIndex(p => p.id === id)
       if (existingIndex >= 0) {
         products.value[existingIndex] = data
       } else {
         products.value.push(data)
       }
-      
+
       return data
     } catch (err) {
       console.error('Error fetching product by ID:', err)
@@ -109,36 +122,38 @@ export const useProductsStore = defineStore('products', () => {
 
   const applyFilters = () => {
     let filtered = [...products.value]
-    
+
     if (searchState.value.query) {
       const query = searchState.value.query.toLowerCase()
-      filtered = filtered.filter(product =>
-        product.title.toLowerCase().includes(query) ||
-        product.description.toLowerCase().includes(query) ||
-        product.category.toLowerCase().includes(query)
+      filtered = filtered.filter(
+        product =>
+          product.title.toLowerCase().includes(query) ||
+          product.description.toLowerCase().includes(query) ||
+          product.category.toLowerCase().includes(query)
       )
     }
-    
+
     if (searchState.value.filters.category) {
-      filtered = filtered.filter(product =>
-        product.category === searchState.value.filters.category
+      filtered = filtered.filter(
+        product => product.category === searchState.value.filters.category
       )
     }
-    
-    filtered = filtered.filter(product =>
-      product.price >= searchState.value.filters.priceRange.min &&
-      product.price <= searchState.value.filters.priceRange.max
+
+    filtered = filtered.filter(
+      product =>
+        product.price >= searchState.value.filters.priceRange.min &&
+        product.price <= searchState.value.filters.priceRange.max
     )
-    
+
     if (searchState.value.filters.rating > 0) {
-      filtered = filtered.filter(product =>
-        product.rating.rate >= searchState.value.filters.rating
+      filtered = filtered.filter(
+        product => product.rating.rate >= searchState.value.filters.rating
       )
     }
-    
+
     filtered.sort((a, b) => {
       let comparison = 0
-      
+
       switch (searchState.value.sortBy) {
         case 'price':
           comparison = a.price - b.price
@@ -150,10 +165,10 @@ export const useProductsStore = defineStore('products', () => {
           comparison = a.title.localeCompare(b.title)
           break
       }
-      
+
       return searchState.value.sortOrder === 'desc' ? -comparison : comparison
     })
-    
+
     filteredProducts.value = filtered
   }
 
@@ -164,7 +179,7 @@ export const useProductsStore = defineStore('products', () => {
 
   const updateFilters = (filters: Partial<FilterOptions>) => {
     searchState.value.filters = { ...searchState.value.filters, ...filters }
-    
+
     if (filters.category !== undefined) {
       if (filters.category === '') {
         fetchProducts()
@@ -176,7 +191,10 @@ export const useProductsStore = defineStore('products', () => {
     }
   }
 
-  const updateSort = (sortBy: 'price' | 'rating' | 'name', sortOrder: 'asc' | 'desc') => {
+  const updateSort = (
+    sortBy: 'price' | 'rating' | 'name',
+    sortOrder: 'asc' | 'desc'
+  ) => {
     searchState.value.sortBy = sortBy
     searchState.value.sortOrder = sortOrder
     applyFilters()
@@ -203,11 +221,13 @@ export const useProductsStore = defineStore('products', () => {
   const hasProducts = computed(() => products.value.length > 0)
   const hasFilteredProducts = computed(() => filteredProducts.value.length > 0)
   const isFiltered = computed(() => {
-    return searchState.value.query !== '' ||
-           searchState.value.filters.category !== '' ||
-           searchState.value.filters.rating > 0 ||
-           searchState.value.filters.priceRange.min > 0 ||
-           searchState.value.filters.priceRange.max < 1000
+    return (
+      searchState.value.query !== '' ||
+      searchState.value.filters.category !== '' ||
+      searchState.value.filters.rating > 0 ||
+      searchState.value.filters.priceRange.min > 0 ||
+      searchState.value.filters.priceRange.max < 1000
+    )
   })
 
   return {
@@ -217,7 +237,7 @@ export const useProductsStore = defineStore('products', () => {
     loading,
     error,
     searchState,
-    
+
     fetchProducts,
     fetchCategories,
     fetchProductsByCategory,
@@ -228,7 +248,7 @@ export const useProductsStore = defineStore('products', () => {
     updateSort,
     clearFilters,
     getProductById,
-    
+
     hasProducts,
     hasFilteredProducts,
     isFiltered

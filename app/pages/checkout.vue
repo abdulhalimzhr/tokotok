@@ -1,9 +1,7 @@
 <template>
   <div class="max-w-4xl mx-auto space-y-8 min-h-screen mt-8 px-4">
     <div class="text-left">
-      <h1
-        class="text-3xl font-bold text-gray-900 dark:text-gray-100 mb-2"
-      >
+      <h1 class="text-3xl font-bold text-gray-900 dark:text-gray-100 mb-2">
         Checkout
       </h1>
       <p class="text-gray-600 dark:text-gray-400">
@@ -22,10 +20,7 @@
             Order Summary
           </h2>
 
-          <div
-            v-if="cartStore.isEmpty"
-            class="text-center py-8"
-          >
+          <div v-if="cartStore.isEmpty" class="text-center py-8">
             <p class="text-gray-600 dark:text-gray-400 mb-4">
               Your cart is empty
             </p>
@@ -38,10 +33,7 @@
             </NuxtLink>
           </div>
 
-          <div
-            v-else
-            class="space-y-4"
-          >
+          <div v-else class="space-y-4">
             <CheckoutItem
               v-for="item in cartStore.items"
               :key="item.product.id"
@@ -82,14 +74,10 @@
                   </svg>
                 </div>
                 <div>
-                  <p
-                    class="font-medium text-green-900 dark:text-green-100"
-                  >
+                  <p class="font-medium text-green-900 dark:text-green-100">
                     Wallet Balance
                   </p>
-                  <p
-                    class="text-sm text-green-700 dark:text-green-300"
-                  >
+                  <p class="text-sm text-green-700 dark:text-green-300">
                     {{ walletStore.formattedBalance }} available
                   </p>
                 </div>
@@ -125,31 +113,21 @@
               <span class="text-gray-600 dark:text-gray-400">
                 Subtotal ({{ cartStore.items.length }} items)
               </span>
-              <span
-                class="font-medium text-gray-900 dark:text-gray-100"
-              >
+              <span class="font-medium text-gray-900 dark:text-gray-100">
                 {{ cartStore.formattedTotal }}
               </span>
             </div>
 
             <div class="flex justify-between text-sm">
-              <span class="text-gray-600 dark:text-gray-400">
-                Shipping
-              </span>
-              <span
-                class="font-medium text-green-600 dark:text-green-400"
-              >
+              <span class="text-gray-600 dark:text-gray-400"> Shipping </span>
+              <span class="font-medium text-green-600 dark:text-green-400">
                 Free
               </span>
             </div>
 
             <div class="flex justify-between text-sm">
-              <span class="text-gray-600 dark:text-gray-400">
-                Tax
-              </span>
-              <span
-                class="font-medium text-gray-900 dark:text-gray-100"
-              >
+              <span class="text-gray-600 dark:text-gray-400"> Tax </span>
+              <span class="font-medium text-gray-900 dark:text-gray-100">
                 $0.00
               </span>
             </div>
@@ -158,9 +136,7 @@
               class="border-t border-gray-200 dark:border-gray-600 pt-3 text-sm"
             >
               <div class="flex justify-between font-semibold">
-                <span class="text-gray-900 dark:text-gray-100">
-                  Total
-                </span>
+                <span class="text-gray-900 dark:text-gray-100"> Total </span>
                 <span class="text-gray-900 dark:text-gray-100">
                   {{ cartStore.formattedTotal }}
                 </span>
@@ -183,9 +159,7 @@
               <span class="text-gray-600 dark:text-gray-400">
                 Current Balance
               </span>
-              <span
-                class="font-medium text-gray-900 dark:text-gray-100"
-              >
+              <span class="font-medium text-gray-900 dark:text-gray-100">
                 {{ walletStore.formattedBalance }}
               </span>
             </div>
@@ -194,16 +168,12 @@
               <span class="text-gray-600 dark:text-gray-400">
                 Order Total
               </span>
-              <span
-                class="font-medium text-gray-900 dark:text-gray-100"
-              >
+              <span class="font-medium text-gray-900 dark:text-gray-100">
                 {{ cartStore.formattedTotal }}
               </span>
             </div>
 
-            <div
-              class="border-t border-gray-200 dark:border-gray-600 pt-3"
-            >
+            <div class="border-t border-gray-200 dark:border-gray-600 pt-3">
               <div class="flex justify-between text-sm font-semibold">
                 <span class="text-gray-900 dark:text-gray-100">
                   Remaining Balance
@@ -211,18 +181,15 @@
                 <span
                   :class="{
                     'text-green-600 dark:text-green-400':
-                      (walletStore.balance || 0) >=
-                      (cartStore.totalPrice || 0),
+                      (walletStore.balance || 0) >= (cartStore.totalPrice || 0),
                     'text-red-600 dark:text-red-400':
-                      (walletStore.balance || 0) <
-                      (cartStore.totalPrice || 0)
+                      (walletStore.balance || 0) < (cartStore.totalPrice || 0)
                   }"
                 >
                   ${{
                     Math.max(
                       0,
-                      (walletStore.balance || 0) -
-                        (cartStore.totalPrice || 0)
+                      (walletStore.balance || 0) - (cartStore.totalPrice || 0)
                     ).toFixed(2)
                   }}
                 </span>
@@ -231,9 +198,7 @@
           </div>
 
           <div
-            v-if="
-              (walletStore.balance || 0) < (cartStore.totalPrice || 0)
-            "
+            v-if="(walletStore.balance || 0) < (cartStore.totalPrice || 0)"
             class="mt-4 p-3 bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-700 rounded-lg"
           >
             <div class="flex items-start space-x-2">
@@ -249,17 +214,14 @@
                 />
               </svg>
               <div>
-                <p
-                  class="text-sm font-medium text-red-800 dark:text-red-200"
-                >
+                <p class="text-sm font-medium text-red-800 dark:text-red-200">
                   Insufficient Balance
                 </p>
                 <p class="text-sm text-red-700 dark:text-red-300">
                   You need ${{
                     Math.max(
                       0,
-                      (cartStore.totalPrice || 0) -
-                        (walletStore.balance || 0)
+                      (cartStore.totalPrice || 0) - (walletStore.balance || 0)
                     ).toFixed(2)
                   }}
                   more to complete this purchase.
@@ -271,20 +233,35 @@
 
         <div class="space-y-3">
           <button
-            class="w-full px-4 py-3 bg-green-600 text-white rounded-lg font-medium hover:bg-green-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+            class="w-full px-4 py-3 bg-green-600 text-white rounded-lg font-medium hover:bg-green-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors flex items-center justify-center space-x-2"
             :disabled="
               cartStore.isEmpty ||
-              (walletStore.balance || 0) <
-                (cartStore.totalPrice || 0) ||
+              (walletStore.balance || 0) < (cartStore.totalPrice || 0) ||
               isProcessing
             "
             @click="processOrder"
           >
-            <span v-if="isProcessing">Processing...</span>
+            <div v-if="isProcessing" class="flex items-center space-x-2">
+              <svg class="animate-spin h-5 w-5" fill="none" viewBox="0 0 24 24">
+                <circle
+                  class="opacity-25"
+                  cx="12"
+                  cy="12"
+                  r="10"
+                  stroke="currentColor"
+                  stroke-width="4"
+                />
+                <path
+                  class="opacity-75"
+                  fill="currentColor"
+                  d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"
+                />
+              </svg>
+              <span>Processing Order...</span>
+            </div>
             <span
               v-else-if="
-                (walletStore.balance || 0) <
-                (cartStore.totalPrice || 0)
+                (walletStore.balance || 0) < (cartStore.totalPrice || 0)
               "
             >
               Insufficient Balance
@@ -295,9 +272,7 @@
           </button>
 
           <button
-            v-if="
-              (walletStore.balance || 0) < (cartStore.totalPrice || 0)
-            "
+            v-if="(walletStore.balance || 0) < (cartStore.totalPrice || 0)"
             class="w-full px-4 py-3 border-2 border-green-600 text-green-600 dark:text-green-400 rounded-lg font-medium hover:bg-green-50 dark:hover:bg-green-900/20 transition-colors"
             @click="showTopUpModal = true"
           >
@@ -367,9 +342,7 @@
             Math.max(
               0,
               Math.ceil(
-                ((cartStore.totalPrice || 0) -
-                  (walletStore.balance || 0)) *
-                  100
+                ((cartStore.totalPrice || 0) - (walletStore.balance || 0)) * 100
               ) / 100
             )
           "
@@ -392,8 +365,7 @@
               topUpAmount <
                 Math.max(
                   0,
-                  (cartStore.totalPrice || 0) -
-                    (walletStore.balance || 0)
+                  (cartStore.totalPrice || 0) - (walletStore.balance || 0)
                 )
             "
             @click="handleTopUp"
@@ -425,15 +397,12 @@
           </svg>
         </div>
 
-        <h3
-          class="text-lg font-semibold text-gray-900 dark:text-gray-100"
-        >
+        <h3 class="text-lg font-semibold text-gray-900 dark:text-gray-100">
           Order Completed!
         </h3>
 
         <p class="text-gray-600 dark:text-gray-400">
-          Your order has been successfully processed and will be
-          delivered soon.
+          Your order has been successfully processed and will be delivered soon.
         </p>
 
         <div class="flex gap-3 justify-center pt-2">
@@ -456,140 +425,132 @@
 </template>
 
 <script setup lang="ts">
-  import { toast } from 'vue3-toastify';
+import { toast } from 'vue3-toastify'
 
-  const cartStore = useCartStore();
-  const walletStore = useWalletStore();
-  const router = useRouter();
+const cartStore = useCartStore()
+const walletStore = useWalletStore()
+const router = useRouter()
 
-  const isProcessing = ref(false);
-  const showTopUpModal = ref(false);
-  const showSuccessModal = ref(false);
-  const topUpAmount = ref<number>(0);
-  const isTopUpLoading = ref(false);
+const isProcessing = ref(false)
+const showTopUpModal = ref(false)
+const showSuccessModal = ref(false)
+const topUpAmount = ref<number>(0)
+const isTopUpLoading = ref(false)
 
-  const quickTopUpAmounts = computed(() => {
-    const totalPrice = cartStore.totalPrice || 0;
-    const balance = walletStore.balance || 0;
-    const needed = totalPrice - balance;
-    const baseAmounts = [10, 25, 50, 100];
-    const minNeeded = Math.max(0, Math.ceil(needed * 100) / 100);
+const quickTopUpAmounts = computed(() => {
+  const totalPrice = cartStore.totalPrice || 0
+  const balance = walletStore.balance || 0
+  const needed = totalPrice - balance
+  const baseAmounts = [10, 25, 50, 100]
+  const minNeeded = Math.max(0, Math.ceil(needed * 100) / 100)
 
-    return [
-      minNeeded,
-      ...baseAmounts.filter((a) => a > minNeeded)
-    ].slice(0, 3);
-  });
+  return [minNeeded, ...baseAmounts.filter(a => a > minNeeded)].slice(0, 3)
+})
 
-  const processOrder = async () => {
-    const totalPrice = cartStore.totalPrice || 0;
-    const balance = walletStore.balance || 0;
+const processOrder = async () => {
+  const totalPrice = cartStore.totalPrice || 0
+  const balance = walletStore.balance || 0
 
-    if (cartStore.isEmpty || balance < totalPrice) {
-      toast.error(
-        'Cannot process order: insufficient balance or empty cart'
-      );
-      return;
-    }
+  if (cartStore.isEmpty || balance < totalPrice) {
+    toast.error('Cannot process order: insufficient balance or empty cart')
+    return
+  }
 
-    isProcessing.value = true;
+  isProcessing.value = true
 
-    try {
-      await new Promise((resolve) => setTimeout(resolve, 2000));
+  try {
+    await new Promise(resolve => setTimeout(resolve, 2000))
 
-      await walletStore.purchase(
-        cartStore.totalPrice,
-        `Order purchase - ${cartStore.items.length} items`
-      );
+    await walletStore.purchase(
+      cartStore.totalPrice,
+      `Order purchase - ${cartStore.items.length} items`
+    )
 
-      cartStore.clearCart();
+    cartStore.clearCart()
 
-      showSuccessModal.value = true;
+    showSuccessModal.value = true
 
-      await nextTick();
-      setTimeout(() => {
-        toast.success(
-          'Order completed! Your purchase has been processed successfully'
-        );
-      }, 100);
-    } catch (error) {
-      console.error('Order processing error:', error);
-      const errorMessage =
-        error instanceof Error
-          ? error.message
-          : 'There was an error processing your order';
-      toast.error(`Order failed: ${errorMessage}`);
-    } finally {
-      isProcessing.value = false;
-    }
-  };
+    await nextTick()
+    setTimeout(() => {
+      toast.success(
+        'Order completed! Your purchase has been processed successfully'
+      )
+    }, 100)
+  } catch (error) {
+    console.error('Order processing error:', error)
+    const errorMessage =
+      error instanceof Error
+        ? error.message
+        : 'There was an error processing your order'
+    toast.error(`Order failed: ${errorMessage}`)
+  } finally {
+    isProcessing.value = false
+  }
+}
 
-  const handleTopUp = async () => {
-    if (!topUpAmount.value || topUpAmount.value <= 0) {
-      toast.error('Please enter a valid top-up amount');
-      return;
-    }
+const handleTopUp = async () => {
+  if (!topUpAmount.value || topUpAmount.value <= 0) {
+    toast.error('Please enter a valid top-up amount')
+    return
+  }
 
-    isTopUpLoading.value = true;
+  isTopUpLoading.value = true
 
-    try {
-      await walletStore.topUp(
-        topUpAmount.value,
-        `Checkout top-up of $${topUpAmount.value}`
-      );
+  try {
+    await walletStore.topUp(
+      topUpAmount.value,
+      `Checkout top-up of $${topUpAmount.value}`
+    )
 
-      await nextTick();
-      setTimeout(() => {
-        toast.success(
-          `Wallet topped up! Added $${topUpAmount.value.toFixed(
-            2
-          )} to your wallet`
-        );
-      }, 100);
+    await nextTick()
+    setTimeout(() => {
+      toast.success(
+        `Wallet topped up! Added $${topUpAmount.value.toFixed(
+          2
+        )} to your wallet`
+      )
+    }, 100)
 
-      showTopUpModal.value = false;
-      topUpAmount.value = 0;
-    } catch (error) {
-      console.error('Top-up error:', error);
-      const errorMessage =
-        error instanceof Error
-          ? error.message
-          : 'Failed to add funds to wallet';
-      toast.error(`Top up failed: ${errorMessage}`);
-    } finally {
-      isTopUpLoading.value = false;
-    }
-  };
+    showTopUpModal.value = false
+    topUpAmount.value = 0
+  } catch (error) {
+    console.error('Top-up error:', error)
+    const errorMessage =
+      error instanceof Error ? error.message : 'Failed to add funds to wallet'
+    toast.error(`Top up failed: ${errorMessage}`)
+  } finally {
+    isTopUpLoading.value = false
+  }
+}
 
-  const goToWallet = () => {
-    showSuccessModal.value = false;
-    router.push('/wallet');
-  };
+const goToWallet = () => {
+  showSuccessModal.value = false
+  router.push('/wallet')
+}
 
-  const continueShopping = () => {
-    showSuccessModal.value = false;
-    router.push('/');
-  };
+const continueShopping = () => {
+  showSuccessModal.value = false
+  router.push('/')
+}
 
-  watch(showTopUpModal, (isOpen) => {
-    const totalPrice = cartStore.totalPrice || 0;
-    const balance = walletStore.balance || 0;
+watch(showTopUpModal, isOpen => {
+  const totalPrice = cartStore.totalPrice || 0
+  const balance = walletStore.balance || 0
 
-    if (isOpen && totalPrice > balance) {
-      const needed = totalPrice - balance;
-      topUpAmount.value = Math.max(0, Math.ceil(needed * 100) / 100);
-    }
-  });
+  if (isOpen && totalPrice > balance) {
+    const needed = totalPrice - balance
+    topUpAmount.value = Math.max(0, Math.ceil(needed * 100) / 100)
+  }
+})
 
-  useSeoMeta({
-    title: 'Checkout - TokoTok',
-    description:
-      'Complete your purchase securely with your digital wallet.'
-  });
+useSeoMeta({
+  title: 'Checkout - TokoTok',
+  description: 'Complete your purchase securely with your digital wallet.'
+})
 
-  onMounted(() => {
-    if (cartStore.isEmpty) {
-      router.push('/');
-    }
-  });
+onMounted(() => {
+  if (cartStore.isEmpty) {
+    router.push('/')
+  }
+})
 </script>

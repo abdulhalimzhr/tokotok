@@ -1,11 +1,11 @@
-import { defineStore } from 'pinia';
-import type { Transaction, WalletState } from '~/types';
+import { defineStore } from 'pinia'
+import type { Transaction, WalletState } from '~/types'
 
 export const useWalletStore = defineStore('wallet', () => {
-  const balance = ref(1000);
-  const transactions = ref<Transaction[]>([]);
-  const loading = ref(false);
-  const error = ref<string | null>(null);
+  const balance = ref(1000)
+  const transactions = ref<Transaction[]>([])
+  const loading = ref(false)
+  const error = ref<string | null>(null)
 
   const saveToStorage = () => {
     if (process.client && typeof window !== 'undefined') {
@@ -13,76 +13,77 @@ export const useWalletStore = defineStore('wallet', () => {
         const walletData = {
           balance: balance.value,
           transactions: transactions.value
-        };
-        localStorage.setItem('wallet-data', JSON.stringify(walletData));
-        console.log('Wallet saved to localStorage:', walletData);
+        }
+        localStorage.setItem('wallet-data', JSON.stringify(walletData))
+        console.log('Wallet saved to localStorage:', walletData)
       } catch (e) {
-        console.error('Failed to save wallet data:', e);
+        console.error('Failed to save wallet data:', e)
       }
     }
-  };
+  }
 
   const loadFromStorage = () => {
     if (process.client && typeof window !== 'undefined') {
       try {
-        const savedData = localStorage.getItem('wallet-data');
+        const savedData = localStorage.getItem('wallet-data')
         if (savedData) {
-          const walletData = JSON.parse(savedData);
-          balance.value = walletData.balance || 1000;
-          transactions.value = (walletData.transactions || []).map((t: any) => ({
-            ...t,
-            timestamp: new Date(t.timestamp)
-          }));
-          console.log('Wallet loaded from localStorage:', walletData);
+          const walletData = JSON.parse(savedData)
+          balance.value = walletData.balance || 1000
+          transactions.value = (walletData.transactions || []).map(
+            (t: any) => ({
+              ...t,
+              timestamp: new Date(t.timestamp)
+            })
+          )
+          console.log('Wallet loaded from localStorage:', walletData)
         }
       } catch (e) {
-        console.error('Failed to load wallet data:', e);
+        console.error('Failed to load wallet data:', e)
       }
     }
-  };
+  }
 
   const recentTransactions = computed(() =>
     transactions.value
       .slice()
       .sort(
         (a: Transaction, b: Transaction) =>
-          new Date(b.timestamp).getTime() -
-          new Date(a.timestamp).getTime()
+          new Date(b.timestamp).getTime() - new Date(a.timestamp).getTime()
       )
       .slice(0, 10)
-  );
+  )
 
   const totalSpent = computed(() =>
     transactions.value
       .filter((t: Transaction) => t.type === 'purchase')
       .reduce((total: number, t: Transaction) => total + t.amount, 0)
-  );
+  )
 
   const totalTopups = computed(() =>
     transactions.value
       .filter((t: Transaction) => t.type === 'topup')
       .reduce((total: number, t: Transaction) => total + t.amount, 0)
-  );
+  )
 
-  const formattedBalance = computed(() => `$${balance.value.toFixed(2)}`);
+  const formattedBalance = computed(() => `$${balance.value.toFixed(2)}`)
 
   const canAfford = (amount: number): boolean => {
-    return balance.value >= amount;
-  };
+    return balance.value >= amount
+  }
 
   const topUp = async (
     amount: number,
     description: string = 'Wallet top-up'
   ) => {
     if (amount <= 0) {
-      throw new Error('Top-up amount must be positive');
+      throw new Error('Top-up amount must be positive')
     }
 
-    loading.value = true;
-    error.value = null;
+    loading.value = true
+    error.value = null
 
     try {
-      await new Promise((resolve) => setTimeout(resolve, 1000));
+      await new Promise(resolve => setTimeout(resolve, 1000))
 
       const transaction: Transaction = {
         id: Date.now().toString(),
@@ -90,23 +91,21 @@ export const useWalletStore = defineStore('wallet', () => {
         amount,
         description,
         timestamp: new Date()
-      };
+      }
 
-      balance.value += amount;
-      transactions.value.push(transaction);
-      saveToStorage();
+      balance.value += amount
+      transactions.value.push(transaction)
+      saveToStorage()
 
-      return transaction;
+      return transaction
     } catch (err) {
       error.value =
-        err instanceof Error
-          ? err.message
-          : 'Failed to top up wallet';
-      throw err;
+        err instanceof Error ? err.message : 'Failed to top up wallet'
+      throw err
     } finally {
-      loading.value = false;
+      loading.value = false
     }
-  };
+  }
 
   const purchase = async (
     amount: number,
@@ -114,18 +113,18 @@ export const useWalletStore = defineStore('wallet', () => {
     productId?: number
   ) => {
     if (amount <= 0) {
-      throw new Error('Purchase amount must be positive');
+      throw new Error('Purchase amount must be positive')
     }
 
     if (!canAfford(amount)) {
-      throw new Error('Insufficient balance');
+      throw new Error('Insufficient balance')
     }
 
-    loading.value = true;
-    error.value = null;
+    loading.value = true
+    error.value = null
 
     try {
-      await new Promise((resolve) => setTimeout(resolve, 500));
+      await new Promise(resolve => setTimeout(resolve, 500))
 
       const transaction: Transaction = {
         id: Date.now().toString(),
@@ -134,34 +133,32 @@ export const useWalletStore = defineStore('wallet', () => {
         description,
         timestamp: new Date(),
         productId
-      };
+      }
 
-      balance.value -= amount;
-      transactions.value.push(transaction);
-      saveToStorage();
+      balance.value -= amount
+      transactions.value.push(transaction)
+      saveToStorage()
 
-      return transaction;
+      return transaction
     } catch (err) {
       error.value =
-        err instanceof Error
-          ? err.message
-          : 'Failed to complete purchase';
-      throw err;
+        err instanceof Error ? err.message : 'Failed to complete purchase'
+      throw err
     } finally {
-      loading.value = false;
+      loading.value = false
     }
-  };
+  }
 
   const refund = async (
     originalTransactionId: string,
     amount: number,
     description: string
   ) => {
-    loading.value = true;
-    error.value = null;
+    loading.value = true
+    error.value = null
 
     try {
-      await new Promise((resolve) => setTimeout(resolve, 500));
+      await new Promise(resolve => setTimeout(resolve, 500))
 
       const transaction: Transaction = {
         id: Date.now().toString(),
@@ -169,50 +166,43 @@ export const useWalletStore = defineStore('wallet', () => {
         amount,
         description,
         timestamp: new Date()
-      };
+      }
 
-      balance.value += amount;
-      transactions.value.push(transaction);
-      saveToStorage();
+      balance.value += amount
+      transactions.value.push(transaction)
+      saveToStorage()
 
-      return transaction;
+      return transaction
     } catch (err) {
       error.value =
-        err instanceof Error
-          ? err.message
-          : 'Failed to process refund';
-      throw err;
+        err instanceof Error ? err.message : 'Failed to process refund'
+      throw err
     } finally {
-      loading.value = false;
+      loading.value = false
     }
-  };
+  }
 
   const getTransactionsByType = (type: Transaction['type']) => {
-    return transactions.value.filter((t: Transaction) => t.type === type);
-  };
+    return transactions.value.filter((t: Transaction) => t.type === type)
+  }
 
-  const getTransactionsByDateRange = (
-    startDate: Date,
-    endDate: Date
-  ) => {
+  const getTransactionsByDateRange = (startDate: Date, endDate: Date) => {
     return transactions.value.filter((t: Transaction) => {
-      const transactionDate = new Date(t.timestamp);
-      return (
-        transactionDate >= startDate && transactionDate <= endDate
-      );
-    });
-  };
+      const transactionDate = new Date(t.timestamp)
+      return transactionDate >= startDate && transactionDate <= endDate
+    })
+  }
 
   const clearTransactions = () => {
-    transactions.value = [];
-    saveToStorage();
-  };
+    transactions.value = []
+    saveToStorage()
+  }
 
   const resetWallet = () => {
-    balance.value = 1000;
-    transactions.value = [];
-    saveToStorage();
-  };
+    balance.value = 1000
+    transactions.value = []
+    saveToStorage()
+  }
 
   return {
     balance,
@@ -235,5 +225,5 @@ export const useWalletStore = defineStore('wallet', () => {
     resetWallet,
     loadFromStorage,
     saveToStorage
-  };
-});
+  }
+})

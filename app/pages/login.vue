@@ -1,16 +1,13 @@
 <template>
-  <div
-    class="min-h-screen flex flex-col justify-center px-4 lg:px-8"
-  >
+  <div class="min-h-screen flex flex-col justify-center px-4 lg:px-8">
     <div class="sm:mx-auto sm:w-full sm:max-w-md">
       <div class="flex items-center justify-center space-x-2 mb-6">
-        <Icon
-          name="heroicons:wallet"
-          class="w-8 h-8 text-green-500"
-        />
+        <Icon name="heroicons:wallet" class="w-8 h-8 text-green-500" />
         <h1 class="text-3xl font-bold text-green-500">TokoTok</h1>
       </div>
-      <h2 class="text-center text-2xl font-bold text-gray-900 dark:text-gray-100">
+      <h2
+        class="text-center text-2xl font-bold text-gray-900 dark:text-gray-100"
+      >
         Sign in to your account
       </h2>
       <p class="mt-2 text-center text-sm text-gray-600 dark:text-gray-300">
@@ -25,13 +22,8 @@
     </div>
 
     <div class="mt-8 sm:mx-auto sm:w-full sm:max-w-md">
-      <div
-        class="bg-white dark:bg-gray-800 p-8 shadow rounded-lg sm:px-10"
-      >
-        <form
-          class="space-y-6"
-          @submit.prevent="handleLogin"
-        >
+      <div class="bg-white dark:bg-gray-800 p-8 shadow rounded-lg sm:px-10">
+        <form class="space-y-6" @submit.prevent="handleLogin">
           <div>
             <label
               for="username"
@@ -112,16 +104,12 @@
           class="mt-4 p-3 bg-red-50 border border-red-200 rounded-md"
         >
           <div class="flex">
-            <i
-              class="fas fa-exclamation-triangle text-red-400 mr-2"
-            />
+            <i class="fas fa-exclamation-triangle text-red-400 mr-2" />
             <p class="text-sm text-red-800">{{ error }}</p>
           </div>
         </div>
 
-        <div
-          class="mt-6 p-4 bg-green-50 border border-blue-200 rounded-md"
-        >
+        <div class="mt-6 p-4 bg-green-50 border border-blue-200 rounded-md">
           <h3 class="text-sm font-medium text-blue-800 mb-2">
             Demo Credentials:
           </h3>
@@ -142,51 +130,51 @@
 </template>
 
 <script setup>
-  definePageMeta({
-    layout: 'auth'
-  });
+definePageMeta({
+  layout: 'auth'
+})
 
-  useSeoMeta({
-    title: 'Login - TokoTok',
-    description: 'Sign in to your TokoTok account'
-  });
+useSeoMeta({
+  title: 'Login - TokoTok',
+  description: 'Sign in to your TokoTok account'
+})
 
-  const authStore = useAuthStore();
-  const router = useRouter();
+const authStore = useAuthStore()
+const router = useRouter()
 
-  const form = ref({
-    username: '',
-    password: '',
-    rememberMe: false
-  });
+const form = ref({
+  username: '',
+  password: '',
+  rememberMe: false
+})
 
-  const loading = ref(false);
-  const error = ref('');
+const loading = ref(false)
+const error = ref('')
 
-import { toast } from 'vue3-toastify';
+import { toast } from 'vue3-toastify'
 
-  const handleLogin = async () => {
-    loading.value = true;
-    error.value = '';
+const handleLogin = async () => {
+  loading.value = true
+  error.value = ''
 
-    try {
-      await authStore.login(form.value.username, form.value.password);
-      
-      toast.success('Login successful! Welcome back!');
-      
-      await new Promise(resolve => setTimeout(resolve, 500));
-      
-      await router.push('/');
-    } catch (err) {
-      error.value = err.message || 'Login failed. Please try again.';
-    } finally {
-      loading.value = false;
-    }
-  };
+  try {
+    await authStore.login(form.value.username, form.value.password)
 
-  onMounted(() => {
-    if (authStore.isAuthenticated) {
-      router.push('/');
-    }
-  });
+    toast.success('Login successful! Welcome back!')
+
+    await new Promise(resolve => setTimeout(resolve, 500))
+
+    await router.push('/')
+  } catch (err) {
+    error.value = err.message || 'Login failed. Please try again.'
+  } finally {
+    loading.value = false
+  }
+}
+
+onMounted(() => {
+  if (authStore.isAuthenticated) {
+    router.push('/')
+  }
+})
 </script>

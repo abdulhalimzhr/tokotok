@@ -55,7 +55,7 @@ export const useAuthStore = defineStore('auth', () => {
 
   const login = async (username: string, password: string) => {
     loading.value = true
-    
+
     try {
       const response = await $fetch<LoginResponse>('/api/auth/login', {
         method: 'POST',
@@ -67,9 +67,9 @@ export const useAuthStore = defineStore('auth', () => {
 
       if (response.token) {
         token.value = response.token
-        
+
         await fetchUserProfile()
-        
+
         if (import.meta.client) {
           localStorage.setItem('auth_token', response.token)
           localStorage.setItem('user_data', JSON.stringify(user.value))
@@ -87,7 +87,7 @@ export const useAuthStore = defineStore('auth', () => {
 
   const register = async (userData: RegisterData) => {
     loading.value = true
-    
+
     try {
       const response = await $fetch<RegisterResponse>('/api/auth/register', {
         method: 'POST',
@@ -135,12 +135,12 @@ export const useAuthStore = defineStore('auth', () => {
   const logout = () => {
     user.value = null
     token.value = null
-    
+
     if (import.meta.client) {
       localStorage.removeItem('auth_token')
       localStorage.removeItem('user_data')
     }
-    
+
     navigateTo('/login')
   }
 
@@ -148,7 +148,7 @@ export const useAuthStore = defineStore('auth', () => {
     if (import.meta.client) {
       const savedToken = localStorage.getItem('auth_token')
       const savedUser = localStorage.getItem('user_data')
-      
+
       if (savedToken && savedUser) {
         token.value = savedToken
         user.value = JSON.parse(savedUser)
@@ -160,9 +160,9 @@ export const useAuthStore = defineStore('auth', () => {
     user: readonly(user),
     token: readonly(token),
     loading: readonly(loading),
-    
+
     isAuthenticated,
-    
+
     login,
     register,
     logout,

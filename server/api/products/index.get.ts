@@ -1,4 +1,4 @@
-export default defineEventHandler(async (event) => {
+export default defineEventHandler(async event => {
   try {
     const response = await $fetch<any[]>('https://fakestoreapi.com/products')
     return response

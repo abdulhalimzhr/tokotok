@@ -1,7 +1,7 @@
 <template>
   <div class="min-h-screen bg-gray-50 dark:bg-gray-900">
     <AppHeader />
-    
+
     <main class="pb-8">
       <slot />
     </main>
@@ -9,6 +9,7 @@
     <AppFooter />
 
     <ProductModal />
+    <NotificationToast />
   </div>
 </template>
 

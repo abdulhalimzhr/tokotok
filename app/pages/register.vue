@@ -1,16 +1,13 @@
 <template>
-  <div
-    class="min-h-screen flex flex-col justify-center py-12 sm:px-6 lg:px-8"
-  >
+  <div class="min-h-screen flex flex-col justify-center py-12 sm:px-6 lg:px-8">
     <div class="sm:mx-auto sm:w-full sm:max-w-md">
       <div class="flex items-center justify-center space-x-2 mb-6">
-        <Icon
-          name="heroicons:wallet"
-          class="w-8 h-8 text-green-500"
-        />
+        <Icon name="heroicons:wallet" class="w-8 h-8 text-green-500" />
         <h1 class="text-3xl font-bold text-green-500">TokoTok</h1>
       </div>
-      <h2 class="text-center text-2xl font-bold text-gray-900 dark:text-gray-100">
+      <h2
+        class="text-center text-2xl font-bold text-gray-900 dark:text-gray-100"
+      >
         Create your account
       </h2>
       <p class="mt-2 text-center text-sm text-gray-600 dark:text-gray-300">
@@ -26,10 +23,7 @@
 
     <div class="mt-8 sm:mx-auto sm:w-full sm:max-w-md">
       <div class="bg-white p-8 shadow rounded-lg sm:px-10 dark:bg-gray-800">
-        <form
-          class="space-y-6"
-          @submit.prevent="handleRegister"
-        >
+        <form class="space-y-6" @submit.prevent="handleRegister">
           <div>
             <label
               for="email"
@@ -166,10 +160,7 @@
               class="ml-2 block text-sm text-gray-900 dark:text-gray-200"
             >
               I agree to the
-              <a
-                href="#"
-                class="text-green-600 hover:text-green-500"
-              >
+              <a href="#" class="text-green-600 hover:text-green-500">
                 Terms and Conditions
               </a>
             </label>
@@ -197,9 +188,7 @@
           class="mt-4 p-3 bg-red-50 border border-red-200 rounded-md"
         >
           <div class="flex">
-            <i
-              class="fas fa-exclamation-triangle text-red-400 mr-2"
-            />
+            <i class="fas fa-exclamation-triangle text-red-400 mr-2" />
             <p class="text-sm text-red-800">{{ error }}</p>
           </div>
         </div>
@@ -219,78 +208,77 @@
 </template>
 
 <script setup>
-  definePageMeta({
-    layout: 'auth'
-  });
+definePageMeta({
+  layout: 'auth'
+})
 
-  useSeoMeta({
-    title: 'Register - TokoTok',
-    description: 'Create your TokoTok account'
-  });
+useSeoMeta({
+  title: 'Register - TokoTok',
+  description: 'Create your TokoTok account'
+})
 
-  const authStore = useAuthStore();
-  const router = useRouter();
+const authStore = useAuthStore()
+const router = useRouter()
 
-  const form = ref({
-    email: '',
-    username: '',
-    firstName: '',
-    lastName: '',
-    password: '',
-    phone: '',
-    acceptTerms: false
-  });
+const form = ref({
+  email: '',
+  username: '',
+  firstName: '',
+  lastName: '',
+  password: '',
+  phone: '',
+  acceptTerms: false
+})
 
-  const loading = ref(false);
-  const error = ref('');
-  const success = ref('');
+const loading = ref(false)
+const error = ref('')
+const success = ref('')
 
-import { toast } from 'vue3-toastify';
+import { toast } from 'vue3-toastify'
 
-  const handleRegister = async () => {
-    loading.value = true;
-    error.value = '';
-    success.value = '';
+const handleRegister = async () => {
+  loading.value = true
+  error.value = ''
+  success.value = ''
 
-    try {
-      await authStore.register({
-        email: form.value.email,
-        username: form.value.username,
-        password: form.value.password,
-        name: {
-          firstname: form.value.firstName,
-          lastname: form.value.lastName
-        },
-        address: {
-          city: 'kilcoole',
-          street: '7835 new road',
-          number: 3,
-          zipcode: '12926-3874',
-          geolocation: {
-            lat: '-37.3159',
-            long: '81.1496'
-          }
-        },
-        phone: form.value.phone
-      });
+  try {
+    await authStore.register({
+      email: form.value.email,
+      username: form.value.username,
+      password: form.value.password,
+      name: {
+        firstname: form.value.firstName,
+        lastname: form.value.lastName
+      },
+      address: {
+        city: 'kilcoole',
+        street: '7835 new road',
+        number: 3,
+        zipcode: '12926-3874',
+        geolocation: {
+          lat: '-37.3159',
+          long: '81.1496'
+        }
+      },
+      phone: form.value.phone
+    })
 
-      toast.success('Account created successfully! Redirecting to login...');
-      success.value = 'Account created successfully! Redirecting to login...';
+    toast.success('Account created successfully! Redirecting to login...')
+    success.value = 'Account created successfully! Redirecting to login...'
 
-      setTimeout(() => {
-        router.push('/login');
-      }, 2000);
-    } catch (err) {
-      error.value =
-        err.message || 'Registration failed. Please try again.';
-    } finally {
-      loading.value = false;
-    }
-  };
+    setTimeout(() => {
+      router.push('/login')
+    }, 2000)
+  } catch (err) {
+    error.value = err.message || 'Registration failed. Please try again.'
+  } finally {
+    loading.value = false
+  }
+}
 
-  onMounted(() => {
-    if (authStore.isAuthenticated) {
-      router.push('/');
-    }
-  });
+onMounted(() => {
+  if (authStore.isAuthenticated) {
+    router.push('/')
+  }
+})
 </script>

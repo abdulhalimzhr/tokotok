@@ -7,23 +7,23 @@
 </template>
 
 <script setup>
-  import { useProductsStore } from '~/stores/products';
+import { useProductsStore } from '~/stores/products'
 
-  const productsStore = useProductsStore();
+const productsStore = useProductsStore()
 
-  useSeoMeta({
-    title: 'TokoTok - Product Catalog',
-    description:
-      'Browse our collection of amazing products and manage your purchases with our wallet tracking system.'
-  });
+useSeoMeta({
+  title: 'TokoTok - Product Catalog',
+  description:
+    'Browse our collection of amazing products and manage your purchases with our wallet tracking system.'
+})
 
-  onMounted(async () => {
-    if (productsStore.categories.length === 0) {
-      await productsStore.fetchCategories();
-    }
-    
-    if (productsStore.products.length === 0) {
-      await productsStore.fetchProducts();
-    }
-  });
+onMounted(async () => {
+  if (productsStore.categories.length === 0) {
+    await productsStore.fetchCategories()
+  }
+
+  if (productsStore.products.length === 0) {
+    await productsStore.fetchProducts()
+  }
+})
 </script>

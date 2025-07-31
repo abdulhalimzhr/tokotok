@@ -1,6 +1,6 @@
-export default defineEventHandler(async (event) => {
+export default defineEventHandler(async event => {
   const category = getRouterParam(event, 'category')
-  
+
   if (!category) {
     throw createError({
       statusCode: 400,
@@ -11,7 +11,9 @@ export default defineEventHandler(async (event) => {
   try {
     // Decode URL-encoded category name
     const decodedCategory = decodeURIComponent(category)
-    const response = await $fetch(`https://fakestoreapi.com/products/category/${decodedCategory}`)
+    const response = await $fetch(
+      `https://fakestoreapi.com/products/category/${decodedCategory}`
+    )
     return response
   } catch (error) {
     throw createError({

@@ -55,91 +55,97 @@
           </span>
         </div>
         <div class="flex items-center justify-between">
-          <span
-            class="text-base font-bold text-gray-900 dark:text-gray-100"
-          >
+          <span class="text-base font-bold text-gray-900 dark:text-gray-100">
             ${{ product.price.toFixed(2) }}
           </span>
         </div>
       </div>
     </NuxtLink>
     <button
-      class="absolute bottom-3 right-3 px-2 py-1 text-[10px] font-medium text-white bg-green-500 rounded-md hover:bg-green-600 focus:outline-none focus:ring-2 focus:ring-green-400 disabled:opacity-50 disabled:cursor-not-allowed transition-colors z-10"
-      :disabled="
-        !walletStore.canAfford(product.price) || addingToCart
-      "
+      class="absolute bottom-3 right-3 px-2 py-1 text-[10px] font-medium text-white bg-green-500 rounded-md hover:bg-green-600 focus:outline-none focus:ring-2 focus:ring-green-400 disabled:opacity-50 disabled:cursor-not-allowed transition-colors z-10 text-center"
+      :disabled="!walletStore.canAfford(product.price) || addingToCart"
       @click.stop="addToCart"
     >
-      <span v-if="addingToCart">Adding...</span>
-      <span v-else-if="!walletStore.canAfford(product.price)">
-        <Icon
-          name="heroicons:exclamation-triangle"
-          class="w-3 h-3 inline mr-1"
-        />
-        Low Funds
+      <span v-if="addingToCart" class="flex items-center justify-center">
+        <Icon name="heroicons:arrow-path" class="w-3 h-3 animate-spin mr-1" />
+        Adding
       </span>
+
       <span v-else>Add</span>
     </button>
   </div>
 </template>
 
 <script setup>
-  import { useAuthStore } from '~/stores/auth';
-  import { useRouter } from 'vue-router';
-  const props = defineProps({
-    product: {
-      type: Object,
-      required: true
-    }
-  });
+import { useAuthStore } from '~/stores/auth'
+import { useRouter } from 'vue-router'
 
-  const fallbackImg = 'https://via.placeholder.com/150';
-  const imgSrc = ref(props.product.image || fallbackImg);
-  watch(
-    () => props.product.image,
-    (val) => {
-      imgSrc.value = val || fallbackImg;
-    }
-  );
-  function onImgError() {
-    imgSrc.value = fallbackImg;
+const { notify } = useNotifications()
+
+const props = defineProps({
+  product: {
+    type: Object,
+    required: true
+  }
+})
+
+const fallbackImg = 'https://via.placeholder.com/150'
+const imgSrc = ref(props.product.image || fallbackImg)
+watch(
+  () => props.product.image,
+  val => {
+    imgSrc.value = val || fallbackImg
+  }
+)
+function onImgError() {
+  imgSrc.value = fallbackImg
+}
+
+const emit = defineEmits(['add-to-cart'])
+
+const cartStore = useCartStore()
+const walletStore = useWalletStore()
+const authStore = useAuthStore()
+const router = useRouter()
+
+const addingToCart = ref(false)
+
+const addToCart = async () => {
+  if (!authStore.isAuthenticated) {
+    notify.warning(
+      'You must be logged in to add items to your cart.',
+      'Authentication Required'
+    )
+    router.push('/login')
+    return
   }
 
-  const emit = defineEmits(['add-to-cart']);
+  if (!walletStore.canAfford(props.product.price)) {
+    notify.error(
+      `Insufficient funds. You need $${(
+        props.product.price - walletStore.balance
+      ).toFixed(2)} more.`,
+      'Cannot Add to Cart'
+    )
+    return
+  }
 
-  const cartStore = useCartStore();
-  const walletStore = useWalletStore();
-  const authStore = useAuthStore();
-  const router = useRouter();
-
-  const addingToCart = ref(false);
-
-  const addToCart = async () => {
-    if (!authStore.isAuthenticated) {
-      if (typeof window !== 'undefined' && window.toast) {
-        window.toast.error(
-          'You must be logged in to add items to your cart.'
-        );
-      }
-      router.push('/login');
-      return;
-    }
-    addingToCart.value = true;
-    try {
-      await new Promise((resolve) => setTimeout(resolve, 200));
-      emit('add-to-cart', props.product, 1);
-    } finally {
-      addingToCart.value = false;
-    }
-  };
+  addingToCart.value = true
+  try {
+    await new Promise(resolve => setTimeout(resolve, 500))
+    emit('add-to-cart', props.product, 1)
+  } finally {
+    addingToCart.value = false
+  }
+}
 </script>
 
 <style scoped>
-  .line-clamp-2 {
-    display: -webkit-box;
-    -webkit-line-clamp: 2;
-    line-clamp: 2;
-    -webkit-box-orient: vertical;
-    overflow: hidden;
-  }
+.line-clamp-2 {
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
 </style>
