@@ -381,7 +381,7 @@
                 New balance will be: ${{
                   (
                     Number(walletStore.balance || 0) +
-                    Number(quickTopUpAmount.value)
+                    Number(quickTopUpAmount || 0)
                   ).toFixed(2)
                 }}
               </p>
