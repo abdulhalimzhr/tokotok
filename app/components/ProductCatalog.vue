@@ -115,13 +115,12 @@
       />
     </div>
 
-    <!-- Pagination -->
     <Pagination
-      v-if="productsStore.filteredProducts.length > itemsPerPage"
       :current-page="currentPage"
       :total-items="productsStore.filteredProducts.length"
       :items-per-page="itemsPerPage"
       @page-change="handlePageChange"
+      @items-per-page-change="itemsPerPage = $event"
     />
 
     <ProductModal
@@ -145,7 +144,7 @@ const sortOrder = ref(productsStore.searchState.sortOrder)
 
 // Pagination
 const currentPage = ref(1)
-const itemsPerPage = ref(20)
+const itemsPerPage = ref(10)
 
 const paginatedProducts = computed(() => {
   const start = (currentPage.value - 1) * itemsPerPage.value

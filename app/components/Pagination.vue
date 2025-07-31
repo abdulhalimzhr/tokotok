@@ -1,82 +1,98 @@
 <template>
-  <div
-    v-if="totalPages > 1"
-    class="flex items-center justify-center space-x-2 mt-8"
-  >
-    <!-- Previous button -->
-    <button
-      @click="goToPage(currentPage - 1)"
-      :disabled="currentPage <= 1"
-      class="flex items-center px-3 py-2 text-sm font-medium text-gray-500 bg-white border border-gray-300 rounded-l-lg hover:bg-gray-100 hover:text-gray-700 disabled:opacity-50 disabled:cursor-not-allowed dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white"
-    >
-      <Icon name="heroicons:chevron-left" class="w-4 h-4 mr-1" />
-      Previous
-    </button>
-
-    <!-- Page numbers -->
-    <div class="flex space-x-1">
-      <!-- First page -->
-      <button
-        v-if="showFirstPage"
-        @click="goToPage(1)"
-        :class="pageButtonClass(1)"
+  <div class="flex items-center justify-between mt-20 px-2">
+    <!-- Per-page selection -->
+    <div class="flex items-center gap-2">
+      <label
+        for="itemsPerPage"
+        class="text-sm font-medium text-gray-700 dark:text-gray-300 hidden md:block"
       >
-        1
+        Show:
+      </label>
+      <select
+        id="itemsPerPage"
+        :value="itemsPerPage"
+        @change="updateItemsPerPage($event.target.value)"
+        class="px-3 py-2 text-sm border border-gray-300 rounded-md bg-white dark:bg-gray-800 dark:border-gray-700 dark:text-gray-300 focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-green-500"
+      >
+        <option value="10">10</option>
+        <option value="20">20</option>
+        <option value="25">25</option>
+        <option value="50">50</option>
+        <option value="100">100</option>
+      </select>
+      <span class="text-sm text-gray-700 dark:text-gray-300 hidden md:block"
+        >per page</span
+      >
+    </div>
+
+    <!-- Pagination controls -->
+    <div class="flex items-center justify-center space-x-2">
+      <button
+        @click="goToPage(currentPage - 1)"
+        :disabled="currentPage <= 1"
+        class="flex items-center px-3 py-2 text-sm font-medium text-gray-500 bg-white border border-gray-300 rounded-l-lg hover:bg-gray-100 hover:text-gray-700 disabled:opacity-50 disabled:cursor-not-allowed dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white"
+      >
+        <Icon name="heroicons:chevron-left" class="w-4 h-4 mr-1" />
+        Previous
       </button>
 
-      <!-- Ellipsis before current range -->
-      <span
-        v-if="showStartEllipsis"
-        class="px-3 py-2 text-gray-500 dark:text-gray-400"
-      >
-        ...
-      </span>
+      <div class="flex space-x-1">
+        <button
+          v-if="showFirstPage"
+          @click="goToPage(1)"
+          :class="pageButtonClass(1)"
+        >
+          1
+        </button>
 
-      <!-- Current page range -->
+        <span
+          v-if="showStartEllipsis"
+          class="px-3 py-2 text-gray-500 dark:text-gray-400"
+        >
+          ...
+        </span>
+
+        <button
+          v-for="page in visiblePages"
+          :key="page"
+          @click="goToPage(page)"
+          :class="pageButtonClass(page)"
+        >
+          {{ page }}
+        </button>
+
+        <span
+          v-if="showEndEllipsis"
+          class="px-3 py-2 text-gray-500 dark:text-gray-400"
+        >
+          ...
+        </span>
+
+        <button
+          v-if="showLastPage"
+          @click="goToPage(totalPages)"
+          :class="pageButtonClass(totalPages)"
+        >
+          {{ totalPages }}
+        </button>
+      </div>
+
       <button
-        v-for="page in visiblePages"
-        :key="page"
-        @click="goToPage(page)"
-        :class="pageButtonClass(page)"
+        @click="goToPage(currentPage + 1)"
+        :disabled="currentPage >= totalPages"
+        class="flex items-center px-3 py-2 text-sm font-medium text-gray-500 bg-white border border-gray-300 rounded-r-lg hover:bg-gray-100 hover:text-gray-700 disabled:opacity-50 disabled:cursor-not-allowed dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white"
       >
-        {{ page }}
-      </button>
-
-      <!-- Ellipsis after current range -->
-      <span
-        v-if="showEndEllipsis"
-        class="px-3 py-2 text-gray-500 dark:text-gray-400"
-      >
-        ...
-      </span>
-
-      <!-- Last page -->
-      <button
-        v-if="showLastPage"
-        @click="goToPage(totalPages)"
-        :class="pageButtonClass(totalPages)"
-      >
-        {{ totalPages }}
+        Next
+        <Icon name="heroicons:chevron-right" class="w-4 h-4 ml-1" />
       </button>
     </div>
 
-    <!-- Next button -->
-    <button
-      @click="goToPage(currentPage + 1)"
-      :disabled="currentPage >= totalPages"
-      class="flex items-center px-3 py-2 text-sm font-medium text-gray-500 bg-white border border-gray-300 rounded-r-lg hover:bg-gray-100 hover:text-gray-700 disabled:opacity-50 disabled:cursor-not-allowed dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white"
+    <!-- Item count display -->
+    <div
+      class="text-center text-sm text-gray-500 dark:text-gray-400 hidden md:block"
     >
-      Next
-      <Icon name="heroicons:chevron-right" class="w-4 h-4 ml-1" />
-    </button>
-  </div>
-
-  <!-- Page info -->
-  <div
-    v-if="totalPages > 1"
-    class="text-center text-sm text-gray-500 dark:text-gray-400 mt-4"
-  >
-    Showing {{ startItem }} to {{ endItem }} of {{ totalItems }} products
+      Showing {{ startItem }} to {{ endItem }} of {{ totalItems }} products
+    </div>
   </div>
 </template>
 
@@ -145,5 +161,10 @@ const goToPage = page => {
   if (page >= 1 && page <= totalPages.value && page !== props.currentPage) {
     emit('page-change', page)
   }
+}
+
+const updateItemsPerPage = value => {
+  emit('page-change', 1)
+  emit('items-per-page-change', parseInt(value, 10))
 }
 </script>

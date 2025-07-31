@@ -167,6 +167,34 @@
         </div>
       </div>
     </div>
+
+    <Modal v-model="showClearModal">
+      <div class="text-center">
+        <div class="mx-auto flex items-center justify-center h-12 w-12 rounded-full bg-red-100 dark:bg-red-900/30 mb-4">
+          <Icon name="heroicons:exclamation-triangle" class="h-6 w-6 text-red-600 dark:text-red-400" />
+        </div>
+        <h3 class="text-lg font-medium text-gray-900 dark:text-gray-100 mb-2">
+          Clear Cart
+        </h3>
+        <p class="text-sm text-gray-500 dark:text-gray-400 mb-6">
+          Are you sure you want to remove all items from your cart? This action cannot be undone.
+        </p>
+        <div class="flex space-x-3 justify-center">
+          <button
+            class="px-4 py-2 text-sm font-medium text-gray-700 dark:text-gray-300 bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-md hover:bg-gray-50 dark:hover:bg-gray-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500 transition-colors duration-200"
+            @click="showClearModal = false"
+          >
+            Cancel
+          </button>
+          <button
+            class="px-4 py-2 text-sm font-medium text-white bg-red-600 border border-transparent rounded-md hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500 transition-colors duration-200"
+            @click="confirmClearCart"
+          >
+            Clear Cart
+          </button>
+        </div>
+      </div>
+    </Modal>
   </div>
 </template>
 
@@ -178,10 +206,15 @@ const cartStore = useCartStore()
 const { isShoppingCartOpen, toggleShoppingCart, closeShoppingCart } =
   useDropdownState()
 
+const showClearModal = ref(false)
+
 const handleClearCart = () => {
-  if (confirm('Are you sure you want to clear your cart?')) {
-    cartStore.clearCart()
-  }
+  showClearModal.value = true
+}
+
+const confirmClearCart = () => {
+  cartStore.clearCart()
+  showClearModal.value = false
 }
 
 const handleClickOutside = (event: Event) => {

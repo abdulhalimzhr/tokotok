@@ -126,7 +126,8 @@ import { useProductsStore } from '~/stores/products'
 import { useDropdownState } from '~/composables/useDropdownState'
 
 const productsStore = useProductsStore()
-const { isAdvancedFiltersOpen, toggleAdvancedFilters, closeAdvancedFilters } = useDropdownState()
+const { isAdvancedFiltersOpen, toggleAdvancedFilters, closeAdvancedFilters } =
+  useDropdownState()
 
 const filters = ref({
   priceRange: { min: 0, max: 1000 },
@@ -168,7 +169,10 @@ const resetFilters = () => {
 
 // Close dropdown when clicking outside
 const handleClickOutside = event => {
-  if (isAdvancedFiltersOpen.value && !event.target.closest('.advanced-filters-container')) {
+  if (
+    isAdvancedFiltersOpen.value &&
+    !event.target.closest('.advanced-filters-container')
+  ) {
     closeAdvancedFilters()
   }
 }
