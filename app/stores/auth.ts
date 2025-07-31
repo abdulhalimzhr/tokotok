@@ -108,7 +108,9 @@ export const useAuthStore = defineStore('auth', () => {
   }
 
   const fetchUserProfile = async () => {
-    if (!token.value) return
+    if (!token.value) {
+      return
+    }
 
     try {
       user.value = {

@@ -24,14 +24,14 @@ describe('ShoppingCart Component', () => {
   beforeEach(() => {
     pinia = createPinia()
     setActivePinia(pinia)
-    
+
     // Mock dropdown state
     mockDropdownState = {
       isShoppingCartOpen: { value: true },
       toggleShoppingCart: vi.fn(),
       closeShoppingCart: vi.fn()
     }
-    
+
     vi.mocked(useDropdownState).mockReturnValue(mockDropdownState)
   })
 
@@ -39,7 +39,15 @@ describe('ShoppingCart Component', () => {
     const cartStore = useCartStore()
     cartStore.items = [
       {
-        product: { id: 1, title: 'Test Product', price: 10.99, image: '', description: '', category: '', rating: { rate: 4, count: 10 } },
+        product: {
+          id: 1,
+          title: 'Test Product',
+          price: 10.99,
+          image: '',
+          description: '',
+          category: '',
+          rating: { rate: 4, count: 10 }
+        },
         quantity: 2
       }
     ]
@@ -72,14 +80,14 @@ describe('ShoppingCart Component', () => {
     const cartStore = useCartStore()
     cartStore.items = [
       {
-        product: { 
-          id: 1, 
-          title: 'Test Product', 
-          price: 10.99, 
-          image: 'test.jpg', 
-          description: 'Test description', 
-          category: 'test', 
-          rating: { rate: 4, count: 10 } 
+        product: {
+          id: 1,
+          title: 'Test Product',
+          price: 10.99,
+          image: 'test.jpg',
+          description: 'Test description',
+          category: 'test',
+          rating: { rate: 4, count: 10 }
         },
         quantity: 2
       }
@@ -118,11 +126,27 @@ describe('ShoppingCart Component', () => {
     const cartStore = useCartStore()
     cartStore.items = [
       {
-        product: { id: 1, title: 'Product 1', price: 10.00, image: '', description: '', category: '', rating: { rate: 4, count: 10 } },
+        product: {
+          id: 1,
+          title: 'Product 1',
+          price: 10.0,
+          image: '',
+          description: '',
+          category: '',
+          rating: { rate: 4, count: 10 }
+        },
         quantity: 2
       },
       {
-        product: { id: 2, title: 'Product 2', price: 15.50, image: '', description: '', category: '', rating: { rate: 4, count: 10 } },
+        product: {
+          id: 2,
+          title: 'Product 2',
+          price: 15.5,
+          image: '',
+          description: '',
+          category: '',
+          rating: { rate: 4, count: 10 }
+        },
         quantity: 1
       }
     ]
@@ -140,7 +164,15 @@ describe('ShoppingCart Component', () => {
     const cartStore = useCartStore()
     cartStore.items = [
       {
-        product: { id: 1, title: 'Test Product', price: 10.99, image: '', description: '', category: '', rating: { rate: 4, count: 10 } },
+        product: {
+          id: 1,
+          title: 'Test Product',
+          price: 10.99,
+          image: '',
+          description: '',
+          category: '',
+          rating: { rate: 4, count: 10 }
+        },
         quantity: 2
       }
     ]
@@ -162,7 +194,15 @@ describe('ShoppingCart Component', () => {
     const cartStore = useCartStore()
     cartStore.items = [
       {
-        product: { id: 1, title: 'Test Product', price: 10.99, image: '', description: '', category: '', rating: { rate: 4, count: 10 } },
+        product: {
+          id: 1,
+          title: 'Test Product',
+          price: 10.99,
+          image: '',
+          description: '',
+          category: '',
+          rating: { rate: 4, count: 10 }
+        },
         quantity: 2
       }
     ]
@@ -184,7 +224,15 @@ describe('ShoppingCart Component', () => {
     const cartStore = useCartStore()
     cartStore.items = [
       {
-        product: { id: 1, title: 'Test Product', price: 10.99, image: '', description: '', category: '', rating: { rate: 4, count: 10 } },
+        product: {
+          id: 1,
+          title: 'Test Product',
+          price: 10.99,
+          image: '',
+          description: '',
+          category: '',
+          rating: { rate: 4, count: 10 }
+        },
         quantity: 1
       }
     ]
@@ -206,11 +254,27 @@ describe('ShoppingCart Component', () => {
     const cartStore = useCartStore()
     cartStore.items = [
       {
-        product: { id: 1, title: 'Product 1', price: 10.00, image: '', description: '', category: '', rating: { rate: 4, count: 10 } },
+        product: {
+          id: 1,
+          title: 'Product 1',
+          price: 10.0,
+          image: '',
+          description: '',
+          category: '',
+          rating: { rate: 4, count: 10 }
+        },
         quantity: 3
       },
       {
-        product: { id: 2, title: 'Product 2', price: 15.50, image: '', description: '', category: '', rating: { rate: 4, count: 10 } },
+        product: {
+          id: 2,
+          title: 'Product 2',
+          price: 15.5,
+          image: '',
+          description: '',
+          category: '',
+          rating: { rate: 4, count: 10 }
+        },
         quantity: 2
       }
     ]
@@ -228,14 +292,14 @@ describe('ShoppingCart Component', () => {
     const cartStore = useCartStore()
     // Create 100 items to test 99+ display
     cartStore.items = Array.from({ length: 50 }, (_, i) => ({
-      product: { 
-        id: i + 1, 
-        title: `Product ${i + 1}`, 
-        price: 10.00, 
-        image: '', 
-        description: '', 
-        category: '', 
-        rating: { rate: 4, count: 10 } 
+      product: {
+        id: i + 1,
+        title: `Product ${i + 1}`,
+        price: 10.0,
+        image: '',
+        description: '',
+        category: '',
+        rating: { rate: 4, count: 10 }
       },
       quantity: 3 // 50 * 3 = 150 items
     }))

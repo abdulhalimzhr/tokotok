@@ -205,7 +205,10 @@ const filteredSpending = computed(() => {
 })
 
 const averageTransaction = computed(() => {
-  if (filteredTransactions.value.length === 0) return 0
+  if (filteredTransactions.value.length === 0) {
+    return 0
+  }
+
   return filteredSpending.value / filteredTransactions.value.length
 })
 
@@ -252,17 +255,19 @@ const categoryBreakdown = computed(() => {
   ]
 
   filteredTransactions.value.forEach(transaction => {
-    if (transaction.productId) {
-      const product = productsStore.getProductById(transaction.productId)
-      const category = product?.category || 'Other'
-      categoryTotals.set(
-        category,
-        (categoryTotals.get(category) || 0) + transaction.amount
-      )
+    if (transaction.purchaseItems && transaction.purchaseItems.length > 0) {
+      transaction.purchaseItems.forEach(item => {
+        const category = item.category || 'Other'
+        const itemTotal = Number(item.price) * Number(item.quantity)
+        categoryTotals.set(
+          category,
+          (categoryTotals.get(category) || 0) + itemTotal
+        )
+      })
     } else {
       categoryTotals.set(
         'Other',
-        (categoryTotals.get('Other') || 0) + transaction.amount
+        (categoryTotals.get('Other') || 0) + Number(transaction.amount)
       )
     }
   })

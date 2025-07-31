@@ -16,13 +16,21 @@ export interface CartItem {
   quantity: number
 }
 
+export interface PurchaseItem {
+  productId: number
+  price: number
+  quantity: number
+  category: string
+  title: string
+}
+
 export interface Transaction {
   id: string
   type: 'topup' | 'purchase' | 'refund'
   amount: number
   description: string
   timestamp: Date
-  productId?: number
+  purchaseItems?: PurchaseItem[]
 }
 
 export interface WalletState {

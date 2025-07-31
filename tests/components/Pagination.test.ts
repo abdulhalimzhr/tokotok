@@ -54,11 +54,13 @@ describe('Pagination Component', () => {
     })
 
     // Find the page "2" button specifically
-    const page2Button = wrapper.findAll('button').find(btn => btn.text() === '2')
+    const page2Button = wrapper
+      .findAll('button')
+      .find(btn => btn.text() === '2')
     expect(page2Button).toBeDefined()
-    
+
     await page2Button!.trigger('click')
-    
+
     expect(wrapper.emitted('page-change')).toBeTruthy()
     const pageChangeEvents = wrapper.emitted('page-change')
     expect(pageChangeEvents?.[0]).toEqual([2])
@@ -104,7 +106,9 @@ describe('Pagination Component', () => {
     })
 
     // Find the "Next" button specifically
-    const nextButton = wrapper.findAll('button').find(btn => btn.text().includes('Next'))
+    const nextButton = wrapper
+      .findAll('button')
+      .find(btn => btn.text().includes('Next'))
     expect(nextButton).toBeDefined()
     expect(nextButton!.attributes('disabled')).toBeDefined()
   })
@@ -131,7 +135,11 @@ describe('Pagination Component', () => {
     })
 
     // Should not show pagination controls when only one page
-    expect(wrapper.find('.flex.flex-col.sm\\:flex-row.items-center.justify-between.gap-4').exists()).toBe(false)
+    expect(
+      wrapper
+        .find('.flex.flex-col.sm\\:flex-row.items-center.justify-between.gap-4')
+        .exists()
+    ).toBe(false)
   })
 
   it('applies correct responsive classes for mobile', () => {
@@ -145,7 +153,9 @@ describe('Pagination Component', () => {
 
     // Check for actual classes that exist in the component
     expect(wrapper.find('.hidden.md\\:block').exists()).toBe(true)
-    expect(wrapper.find('.flex.items-center.justify-between').exists()).toBe(true)
+    expect(wrapper.find('.flex.items-center.justify-between').exists()).toBe(
+      true
+    )
   })
 
   it('calculates total pages correctly', () => {
@@ -159,7 +169,7 @@ describe('Pagination Component', () => {
 
     // Should show pages 1, 2, 3 (since current page is 1, visible pages will be 1,2,3)
     expect(wrapper.text()).toContain('1')
-    expect(wrapper.text()).toContain('2') 
+    expect(wrapper.text()).toContain('2')
     expect(wrapper.text()).toContain('3')
     // Page 4 should not be shown since we only have 3 total pages
     expect(wrapper.text()).not.toContain(' 4 ')

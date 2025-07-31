@@ -111,7 +111,7 @@
           <div class="space-y-3">
             <div class="flex justify-between text-sm">
               <span class="text-gray-600 dark:text-gray-400">
-                Subtotal ({{ cartStore.items.length }} items)
+                Subtotal ({{ cartStore.itemCount }} items)
               </span>
               <span class="font-medium text-gray-900 dark:text-gray-100">
                 {{ cartStore.formattedTotal }}
@@ -362,10 +362,13 @@
             :disabled="
               isTopUpLoading ||
               !topUpAmount ||
-              topUpAmount <
+              topUpAmount <=
                 Math.max(
                   0,
-                  (cartStore.totalPrice || 0) - (walletStore.balance || 0)
+                  Number(
+                    (parseFloat(Number(cartStore.totalPrice).toFixed(2)) || 0) -
+                      (parseFloat(Number(walletStore.balance).toFixed(2)) || 0)
+                  )
                 )
             "
             @click="handleTopUp"
@@ -410,7 +413,7 @@
             class="px-4 py-2 bg-green-600 text-white rounded-lg font-medium hover:bg-green-700 transition-colors"
             @click="goToWallet"
           >
-            View Wallet
+            View Transactions
           </button>
           <button
             class="px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors"
@@ -473,9 +476,18 @@ const processOrder = async () => {
   try {
     await new Promise(resolve => setTimeout(resolve, 2000))
 
+    const purchaseItems = cartStore.items.map(item => ({
+      productId: item.product.id,
+      price: item.product.price,
+      quantity: item.quantity,
+      category: item.product.category,
+      title: item.product.title
+    }))
+
     await walletStore.purchase(
       cartStore.totalPrice,
-      `Order purchase - ${cartStore.items.length} items`
+      `Order purchase - ${cartStore.itemCount} items`,
+      purchaseItems
     )
 
     cartStore.clearCart()

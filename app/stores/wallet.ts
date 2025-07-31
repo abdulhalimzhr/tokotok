@@ -1,5 +1,5 @@
 import { defineStore } from 'pinia'
-import type { Transaction } from '~/types'
+import type { Transaction, PurchaseItem } from '~/types'
 
 export const useWalletStore = defineStore('wallet', () => {
   const balance = ref(0)
@@ -29,17 +29,22 @@ export const useWalletStore = defineStore('wallet', () => {
         if (savedData) {
           const walletData = JSON.parse(savedData)
           balance.value =
-            walletData.balance !== undefined ? walletData.balance : 1000
+            walletData.balance !== undefined ? Number(walletData.balance) : 1000
           transactions.value = (walletData.transactions || []).map(
             (t: any) => ({
               ...t,
+              amount: Number(t.amount), // Ensure amount is a number
               timestamp: new Date(t.timestamp)
             })
           )
-          console.log('Wallet loaded from localStorage:', walletData)
+        } else {
+          balance.value = 0
+          transactions.value = []
         }
       } catch (e) {
         console.error('Failed to load wallet data:', e)
+        balance.value = 0
+        transactions.value = []
       }
     }
   }
@@ -111,7 +116,7 @@ export const useWalletStore = defineStore('wallet', () => {
   const purchase = async (
     amount: number,
     description: string,
-    productId?: number
+    purchaseItems?: PurchaseItem[]
   ) => {
     if (amount <= 0) {
       throw new Error('Purchase amount must be positive')
@@ -133,7 +138,7 @@ export const useWalletStore = defineStore('wallet', () => {
         amount,
         description,
         timestamp: new Date(),
-        productId
+        purchaseItems: purchaseItems || []
       }
 
       balance.value -= amount

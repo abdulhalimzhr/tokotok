@@ -6,7 +6,8 @@ const globalDropdownState = {
 }
 
 export const useDropdownState = () => {
-  const { isShoppingCartOpen, isUserMenuOpen, isAdvancedFiltersOpen } = globalDropdownState
+  const { isShoppingCartOpen, isUserMenuOpen, isAdvancedFiltersOpen } =
+    globalDropdownState
 
   const closeAllDropdowns = () => {
     isShoppingCartOpen.value = false

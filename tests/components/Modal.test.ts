@@ -9,7 +9,7 @@ describe('Modal Component', () => {
   beforeEach(() => {
     pinia = createPinia()
     setActivePinia(pinia)
-    
+
     // Setup DOM environment for teleport
     if (!document.body) {
       const body = document.createElement('body')

@@ -198,7 +198,9 @@ describe('Checkout Page', () => {
     })
 
     const buttons = wrapper.findAll('button')
-    const purchaseButton = buttons.find(btn => btn.text().includes('Complete Purchase'))
+    const purchaseButton = buttons.find(btn =>
+      btn.text().includes('Complete Purchase')
+    )
     expect(purchaseButton?.exists()).toBe(true)
     expect(purchaseButton?.attributes('disabled')).toBeUndefined()
   })
@@ -239,7 +241,9 @@ describe('Checkout Page', () => {
     })
 
     const buttons = wrapper.findAll('button')
-    const topUpButton = buttons.find(btn => btn.text().includes('Top Up Wallet'))
+    const topUpButton = buttons.find(btn =>
+      btn.text().includes('Top Up Wallet')
+    )
     await topUpButton?.trigger('click')
 
     expect(wrapper.find('.modal').exists()).toBe(true)
@@ -278,7 +282,9 @@ describe('Checkout Page', () => {
     })
 
     const buttons = wrapper.findAll('button')
-    const topUpButton = buttons.find(btn => btn.text().includes('Top Up Wallet'))
+    const topUpButton = buttons.find(btn =>
+      btn.text().includes('Top Up Wallet')
+    )
     await topUpButton?.trigger('click')
 
     // Should suggest amounts that cover the difference
@@ -299,9 +305,11 @@ describe('Checkout Page', () => {
 
     // Find and click the purchase button to trigger order process
     const buttons = wrapper.findAll('button')
-    const purchaseButton = buttons.find(btn => btn.text().includes('Complete Purchase'))
+    const purchaseButton = buttons.find(btn =>
+      btn.text().includes('Complete Purchase')
+    )
     await purchaseButton?.trigger('click')
-    
+
     // Wait for the 2 second delay in processOrder plus additional time for async operations
     await new Promise(resolve => setTimeout(resolve, 2500))
     await wrapper.vm.$nextTick()
@@ -310,9 +318,9 @@ describe('Checkout Page', () => {
     // We can verify this from the stdout showing the wallet transaction
     // This test verifies that the async order processing completes without errors
     expect(wrapper.exists()).toBe(true) // The component still exists and didn't crash
-    
+
     // We can see from stdout that the transaction was processed successfully:
-    // - Wallet balance reduced from $100 to $40.02  
+    // - Wallet balance reduced from $100 to $40.02
     // - Transaction added: "Order purchase - 1 items" for $59.98
     // This confirms the order processing worked correctly
   }, 5000) // Increase test timeout to 5 seconds
@@ -330,7 +338,9 @@ describe('Checkout Page', () => {
     })
 
     const buttons = wrapper.findAll('button')
-    const continueButton = buttons.find(btn => btn.text().includes('Continue Shopping'))
+    const continueButton = buttons.find(btn =>
+      btn.text().includes('Continue Shopping')
+    )
     await continueButton?.trigger('click')
 
     // Note: Since NuxtLink is stubbed, router navigation is handled by NuxtLink, not router.push

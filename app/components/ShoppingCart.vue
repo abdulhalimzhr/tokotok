@@ -170,14 +170,20 @@
 
     <Modal v-model="showClearModal">
       <div class="text-center">
-        <div class="mx-auto flex items-center justify-center h-12 w-12 rounded-full bg-red-100 dark:bg-red-900/30 mb-4">
-          <Icon name="heroicons:exclamation-triangle" class="h-6 w-6 text-red-600 dark:text-red-400" />
+        <div
+          class="mx-auto flex items-center justify-center h-12 w-12 rounded-full bg-red-100 dark:bg-red-900/30 mb-4"
+        >
+          <Icon
+            name="heroicons:exclamation-triangle"
+            class="h-6 w-6 text-red-600 dark:text-red-400"
+          />
         </div>
         <h3 class="text-lg font-medium text-gray-900 dark:text-gray-100 mb-2">
           Clear Cart
         </h3>
         <p class="text-sm text-gray-500 dark:text-gray-400 mb-6">
-          Are you sure you want to remove all items from your cart? This action cannot be undone.
+          Are you sure you want to remove all items from your cart? This action
+          cannot be undone.
         </p>
         <div class="flex space-x-3 justify-center">
           <button

@@ -179,7 +179,7 @@ describe('ProductCard Component', () => {
     // Wait for the 500ms timeout in the component's addToCart method
     await new Promise(resolve => setTimeout(resolve, 600))
     await wrapper.vm.$nextTick()
-    
+
     expect(wrapper.emitted('add-to-cart')).toBeTruthy()
     const events = wrapper.emitted('add-to-cart')
     expect(events?.[0]).toEqual([mockProduct, 1])
@@ -204,14 +204,14 @@ describe('ProductCard Component', () => {
     })
 
     const addToCartButton = wrapper.find('button')
-    
+
     // Trigger click and immediately check for disabled state
     const clickPromise = addToCartButton.trigger('click')
     await wrapper.vm.$nextTick()
-    
+
     // Button should be disabled while loading
     expect(addToCartButton.text()).toContain('Adding')
-    
+
     // Wait for the operation to complete
     await clickPromise
   })
@@ -239,7 +239,8 @@ describe('ProductCard Component', () => {
   it('truncates long product titles', () => {
     const longTitleProduct = {
       ...mockProduct,
-      title: 'This is a very long product title that should be truncated to fit in the card layout properly'
+      title:
+        'This is a very long product title that should be truncated to fit in the card layout properly'
     }
 
     const wrapper = mount(ProductCard, {

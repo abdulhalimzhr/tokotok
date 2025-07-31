@@ -22,7 +22,12 @@ export const mockProducts = [
   }
 ]
 
-export const mockCategories = ['electronics', 'clothing', 'jewelery', "men's clothing"]
+export const mockCategories = [
+  'electronics',
+  'clothing',
+  'jewelery',
+  "men's clothing"
+]
 
 export const mockUser = {
   id: 1,
@@ -38,7 +43,7 @@ export const mockAuthResponse = {
 // Mock $fetch globally
 global.$fetch = vi.fn((url: string, options?: any) => {
   const method = options?.method || 'GET'
-  
+
   if (method === 'GET') {
     if (url === '/api/products') {
       return Promise.resolve(mockProducts)
@@ -50,12 +55,15 @@ global.$fetch = vi.fn((url: string, options?: any) => {
       const category = url.split('/').pop()
       return Promise.resolve(mockProducts.filter(p => p.category === category))
     }
-    if (url.startsWith('/api/products/') && url !== '/api/products/categories') {
+    if (
+      url.startsWith('/api/products/') &&
+      url !== '/api/products/categories'
+    ) {
       const id = parseInt(url.split('/').pop() || '0')
       return Promise.resolve(mockProducts.find(p => p.id === id))
     }
   }
-  
+
   if (method === 'POST') {
     if (url === '/api/auth/login') {
       return Promise.resolve(mockAuthResponse)
@@ -64,6 +72,6 @@ global.$fetch = vi.fn((url: string, options?: any) => {
       return Promise.resolve(mockAuthResponse)
     }
   }
-  
+
   return Promise.reject(new Error(`Mock not found for ${method} ${url}`))
 })

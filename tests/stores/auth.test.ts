@@ -26,7 +26,7 @@ describe('Auth Store', () => {
     authStore = useAuthStore()
     vi.clearAllMocks()
     mockFetch.mockClear()
-    
+
     // Clear localStorage mocks
     localStorageMock.getItem.mockClear()
     localStorageMock.setItem.mockClear()
@@ -36,7 +36,7 @@ describe('Auth Store', () => {
   describe('Authentication', () => {
     it('logs in user successfully', async () => {
       const mockResponse = { token: 'fake-token' }
-      
+
       mockFetch.mockResolvedValueOnce(mockResponse)
 
       await authStore.login('testuser', 'password')
@@ -44,14 +44,22 @@ describe('Auth Store', () => {
       expect(authStore.user).toBeTruthy()
       expect(authStore.token).toBe('fake-token')
       expect(authStore.isAuthenticated).toBe(true)
-      expect(localStorageMock.setItem).toHaveBeenCalledWith('auth_token', 'fake-token')
-      expect(localStorageMock.setItem).toHaveBeenCalledWith('user_data', expect.any(String))
+      expect(localStorageMock.setItem).toHaveBeenCalledWith(
+        'auth_token',
+        'fake-token'
+      )
+      expect(localStorageMock.setItem).toHaveBeenCalledWith(
+        'user_data',
+        expect.any(String)
+      )
     })
 
     it('handles login failure', async () => {
       mockFetch.mockRejectedValueOnce(new Error('Invalid credentials'))
 
-      await expect(authStore.login('wronguser', 'wrongpass')).rejects.toThrow('Invalid username or password')
+      await expect(authStore.login('wronguser', 'wrongpass')).rejects.toThrow(
+        'Invalid username or password'
+      )
 
       expect(authStore.user).toBeNull()
       expect(authStore.token).toBeNull()
@@ -61,14 +69,16 @@ describe('Auth Store', () => {
     it('handles network errors during login', async () => {
       mockFetch.mockRejectedValueOnce(new Error('Network error'))
 
-      await expect(authStore.login('testuser', 'password')).rejects.toThrow('Invalid username or password')
+      await expect(authStore.login('testuser', 'password')).rejects.toThrow(
+        'Invalid username or password'
+      )
 
       expect(authStore.isAuthenticated).toBe(false)
     })
 
     it('registers user successfully', async () => {
       const mockUser = { id: 1, username: 'newuser', email: 'new@example.com' }
-      
+
       mockFetch.mockResolvedValueOnce(mockUser)
 
       const result = await authStore.register({
@@ -92,20 +102,22 @@ describe('Auth Store', () => {
     it('handles registration failure', async () => {
       mockFetch.mockRejectedValueOnce(new Error('Registration failed'))
 
-      await expect(authStore.register({
-        email: 'existing@example.com',
-        username: 'existinguser',
-        password: 'password',
-        name: { firstname: 'Test', lastname: 'User' },
-        address: {
-          city: 'Test City',
-          street: 'Test Street',
-          number: 123,
-          zipcode: '12345',
-          geolocation: { lat: '0', long: '0' }
-        },
-        phone: '1234567890'
-      })).rejects.toThrow('Registration failed. Please try again.')
+      await expect(
+        authStore.register({
+          email: 'existing@example.com',
+          username: 'existinguser',
+          password: 'password',
+          name: { firstname: 'Test', lastname: 'User' },
+          address: {
+            city: 'Test City',
+            street: 'Test Street',
+            number: 123,
+            zipcode: '12345',
+            geolocation: { lat: '0', long: '0' }
+          },
+          phone: '1234567890'
+        })
+      ).rejects.toThrow('Registration failed. Please try again.')
 
       expect(authStore.isAuthenticated).toBe(false)
     })
@@ -116,7 +128,7 @@ describe('Auth Store', () => {
       // Set up authenticated state by logging in first
       mockFetch.mockResolvedValueOnce({ token: 'fake-token' })
       await authStore.login('testuser', 'password')
-      
+
       expect(authStore.isAuthenticated).toBe(true)
 
       authStore.logout()
@@ -129,11 +141,20 @@ describe('Auth Store', () => {
     })
 
     it('initializes auth from localStorage', () => {
-      const mockUser = { id: 1, username: 'testuser', email: 'test@example.com' }
-      
-      localStorageMock.getItem.mockImplementation((key) => {
-        if (key === 'auth_token') return 'stored-token'
-        if (key === 'user_data') return JSON.stringify(mockUser)
+      const mockUser = {
+        id: 1,
+        username: 'testuser',
+        email: 'test@example.com'
+      }
+
+      localStorageMock.getItem.mockImplementation(key => {
+        if (key === 'auth_token') {
+          return 'stored-token'
+        }
+
+        if (key === 'user_data') {
+          return JSON.stringify(mockUser)
+        }
         return null
       })
 
@@ -145,9 +166,14 @@ describe('Auth Store', () => {
     })
 
     it('handles corrupted localStorage data gracefully', () => {
-      localStorageMock.getItem.mockImplementation((key) => {
-        if (key === 'auth_token') return 'stored-token'
-        if (key === 'user_data') return 'invalid-json'
+      localStorageMock.getItem.mockImplementation(key => {
+        if (key === 'auth_token') {
+          return 'stored-token'
+        }
+
+        if (key === 'user_data') {
+          return 'invalid-json'
+        }
         return null
       })
 
@@ -182,7 +208,7 @@ describe('Auth Store', () => {
       mockFetch.mockReturnValueOnce(pendingPromise)
 
       const loginPromise = authStore.login('testuser', 'password')
-      
+
       expect(authStore.loading).toBe(true)
 
       resolvePromise!({ token: 'fake-token' })
@@ -225,7 +251,9 @@ describe('Auth Store', () => {
     it('provides consistent error messages', async () => {
       mockFetch.mockRejectedValueOnce(new Error('Server error'))
 
-      await expect(authStore.login('testuser', 'password')).rejects.toThrow('Invalid username or password')
+      await expect(authStore.login('testuser', 'password')).rejects.toThrow(
+        'Invalid username or password'
+      )
     })
   })
 })

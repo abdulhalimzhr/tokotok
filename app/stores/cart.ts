@@ -9,8 +9,10 @@ export const useCartStore = defineStore('cart', () => {
 
   // Initialize cart from localStorage
   const initializeCart = () => {
-    if (isInitialized.value || typeof window === 'undefined') return
-    
+    if (isInitialized.value || typeof window === 'undefined') {
+      return
+    }
+
     const savedCart = localStorage.getItem('cart-items')
     if (savedCart) {
       try {

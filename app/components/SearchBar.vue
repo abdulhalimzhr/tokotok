@@ -252,7 +252,9 @@ const suggestions = computed(() => {
 })
 
 const saveRecentSearch = query => {
-  if (!query || query.length < 2) return
+  if (!query || query.length < 2) {
+    return
+  }
 
   const searches = [...recentSearches.value]
   const index = searches.indexOf(query)
@@ -273,7 +275,10 @@ const saveRecentSearch = query => {
 }
 
 const highlightMatch = (text, query) => {
-  if (!query) return text
+  if (!query) {
+    return text
+  }
+
   const regex = new RegExp(`(${query})`, 'gi')
   return text.replace(
     regex,
@@ -282,7 +287,9 @@ const highlightMatch = (text, query) => {
 }
 
 const navigateSuggestions = direction => {
-  if (suggestions.value.length === 0) return
+  if (suggestions.value.length === 0) {
+    return
+  }
 
   selectedSuggestionIndex.value += direction
 

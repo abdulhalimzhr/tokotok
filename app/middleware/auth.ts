@@ -1,6 +1,8 @@
 export default defineNuxtRouteMiddleware(to => {
   // Only run on client side
-  if (import.meta.server) return
+  if (import.meta.server) {
+    return
+  }
 
   const authStore = useAuthStore()
 

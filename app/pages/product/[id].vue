@@ -145,6 +145,7 @@
                     type="number"
                     min="1"
                     class="w-16 px-2 py-1 text-center border-0 bg-transparent focus:ring-0"
+                    @input="validateQty"
                   />
                   <button
                     @click="qty++"
@@ -184,12 +185,19 @@ import { ref, computed, watch, onMounted } from 'vue'
 import { useRoute } from 'vue-router'
 import { useProductsStore } from '~/stores/products'
 import { useCartStore } from '~/stores/cart'
-import { useWalletStore } from '~/stores/wallet'
+
+useSeoMeta({
+  title: () =>
+    product.value?.title
+      ? `${product.value.title} - TokoTok`
+      : 'Product - TokoTok',
+  description: () =>
+    product.value?.description || 'Product details from TokoTok store'
+})
 
 const route = useRoute()
 const productsStore = useProductsStore()
 const cartStore = useCartStore()
-const walletStore = useWalletStore()
 
 const fallbackImg = '/favicon.ico'
 const product = ref(null)
@@ -205,14 +213,15 @@ const galleryImages = computed(() => {
   return [product.value?.image || fallbackImg]
 })
 
-useSeoMeta({
-  title: () =>
-    product.value?.title
-      ? `${product.value.title} - TokoTok`
-      : 'Product - TokoTok',
-  description: () =>
-    product.value?.description || 'Product details from TokoTok store'
-})
+const validateQty = e => {
+  // validate quantity to be a positive integer and only number
+  const value = parseInt(e.target.value, 10)
+  if (isNaN(value) || value < 1) {
+    qty.value = 1
+  } else {
+    qty.value = value > 0 ? value : 1
+  }
+}
 
 const fetchProduct = async () => {
   const productId = Number(route.params.id)

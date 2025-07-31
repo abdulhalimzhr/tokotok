@@ -206,7 +206,9 @@ const closeModal = () => {
 }
 
 const addToCart = async () => {
-  if (!selectedProduct.value) return
+  if (!selectedProduct.value) {
+    return
+  }
 
   addingToCart.value = true
 
