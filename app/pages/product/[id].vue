@@ -186,15 +186,6 @@ import { useRoute } from 'vue-router'
 import { useProductsStore } from '~/stores/products'
 import { useCartStore } from '~/stores/cart'
 
-useSeoMeta({
-  title: () =>
-    product.value?.title
-      ? `${product.value.title} - TokoTok`
-      : 'Product - TokoTok',
-  description: () =>
-    product.value?.description || 'Product details from TokoTok store'
-})
-
 const route = useRoute()
 const productsStore = useProductsStore()
 const cartStore = useCartStore()
@@ -205,6 +196,16 @@ const loading = ref(true)
 const error = ref(null)
 const imgSrc = ref(fallbackImg)
 const qty = ref(1)
+
+useSeoMeta({
+  title: () =>
+    product.value?.title
+      ? `${product.value.title} - TokoTok`
+      : 'Product - TokoTok',
+  description: () =>
+    product.value?.description || 'Product details from TokoTok store'
+})
+
 
 const galleryImages = computed(() => {
   if (product.value?.images && Array.isArray(product.value.images)) {

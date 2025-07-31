@@ -362,13 +362,10 @@
             :disabled="
               isTopUpLoading ||
               !topUpAmount ||
-              topUpAmount <=
+              topUpAmount <
                 Math.max(
                   0,
-                  Number(
-                    (parseFloat(Number(cartStore.totalPrice).toFixed(2)) || 0) -
-                      (parseFloat(Number(walletStore.balance).toFixed(2)) || 0)
-                  )
+                  (cartStore.totalPrice || 0) - (walletStore.balance || 0)
                 )
             "
             @click="handleTopUp"

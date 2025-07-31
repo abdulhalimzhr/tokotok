@@ -15,11 +15,6 @@ vi.mock('vue-router', () => ({
   useRouter: () => mockRouter
 }))
 
-// Mock auth guard
-vi.mock('../../app/composables/useAuthGuard', () => ({
-  default: vi.fn()
-}))
-
 // Mock toast
 vi.mock('vue3-toastify', () => ({
   toast: {
