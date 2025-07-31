@@ -51,7 +51,9 @@ export const useProductsStore = defineStore('products', () => {
         setTimeout(() => {
           fetchProducts(retryCount + 1)
         }, delay)
-        error.value = `Failed to fetch products. Retrying... (${retryCount + 1}/3)`
+        error.value = `Failed to fetch products. Retrying... (${
+          retryCount + 1
+        }/3)`
       } else {
         error.value =
           'Failed to fetch products after multiple attempts. Please check your connection and try again.'

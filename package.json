@@ -7,7 +7,11 @@
     "dev": "nuxt dev",
     "generate": "nuxt generate",
     "preview": "nuxt preview",
-    "postinstall": "nuxt prepare"
+    "postinstall": "nuxt prepare",
+    "test": "vitest",
+    "test:watch": "vitest --watch",
+    "test:coverage": "vitest --coverage",
+    "test:ui": "vitest --ui"
   },
   "dependencies": {
     "@nuxt/eslint": "^1.7.1",
@@ -32,8 +36,14 @@
   },
   "devDependencies": {
     "@iconify-json/heroicons": "^1.2.2",
+    "@testing-library/jest-dom": "^6.6.4",
+    "@testing-library/vue": "^8.1.0",
+    "@vue/test-utils": "^2.4.6",
     "autoprefixer": "^10.4.21",
+    "happy-dom": "^18.0.1",
+    "jsdom": "^26.1.0",
     "postcss": "^8.5.6",
-    "tailwindcss": "^4.1.11"
+    "tailwindcss": "^4.1.11",
+    "vitest": "^3.2.4"
   }
 }

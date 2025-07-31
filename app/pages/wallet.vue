@@ -37,9 +37,11 @@
           </div>
 
           <div
-            class="bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700"
+            class="bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700 p-6"
           >
-            <div class="p-6 border-b border-gray-200 dark:border-gray-700">
+            <div
+              class="pb-6 mb-6 border-b border-gray-200 dark:border-gray-700"
+            >
               <h2 class="text-xl font-semibold text-gray-900 dark:text-white">
                 Recent Transactions
               </h2>
@@ -47,7 +49,7 @@
                 Your latest wallet activity
               </p>
             </div>
-            <div class="p-6">
+            <div class="max-h-[450px] overflow-y-auto">
               <div
                 v-if="walletStore.transactions.length === 0"
                 class="text-center py-8"
@@ -104,7 +106,7 @@
             class="bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700 p-6"
           >
             <h3
-              class="text-lg font-semibold text-gray-900 dark:text-white mb-4"
+              class="text-lg font-semibold text-gray-900 dark:text-white mb-6 pb-4 border-b border-gray-200 dark:border-gray-700"
             >
               Quick Top Up
             </h3>
@@ -133,7 +135,7 @@
             class="bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700 p-6"
           >
             <h3
-              class="text-lg font-semibold text-gray-900 dark:text-white mb-4"
+              class="text-lg font-semibold text-gray-900 dark:text-white mb-6 pb-4 border-b border-gray-200 dark:border-gray-700"
             >
               Quick Stats
             </h3>
@@ -169,7 +171,7 @@
             class="bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700 p-6"
           >
             <h3
-              class="text-lg font-semibold text-gray-900 dark:text-white mb-4"
+              class="text-lg font-semibold text-gray-900 dark:text-white mb-6 pb-4 border-b border-gray-200 dark:border-gray-700"
             >
               Quick Actions
             </h3>
@@ -270,8 +272,10 @@
 <script setup>
 import { toast } from 'vue3-toastify'
 
-// Authentication check
-await useAuthGuard('/wallet', 'Please login to access your wallet')
+// Use Nuxt middleware for authentication
+definePageMeta({
+  middleware: 'auth'
+})
 
 useSeoMeta({
   title: 'My Wallet - TokoTok',

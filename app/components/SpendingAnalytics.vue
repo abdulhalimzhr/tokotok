@@ -1,8 +1,10 @@
 <template>
   <div
-    class="bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700 p-4 xl:p-3 2xl:p-6"
+    class="bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700 p-6"
   >
-    <div class="flex items-center justify-between mb-6">
+    <div
+      class="flex items-center justify-between mb-6 pb-6 border-b border-gray-200 dark:border-gray-700"
+    >
       <h3 class="text-lg font-semibold text-gray-900 dark:text-white">
         Spending Analytics
       </h3>

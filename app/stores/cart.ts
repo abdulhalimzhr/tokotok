@@ -5,16 +5,23 @@ export const useCartStore = defineStore('cart', () => {
   const { notify } = useNotifications()
   const items = ref<CartItem[]>([])
   const isOpen = ref(false)
+  const isInitialized = ref(false)
 
-  if (typeof window !== 'undefined') {
+  // Initialize cart from localStorage
+  const initializeCart = () => {
+    if (isInitialized.value || typeof window === 'undefined') return
+    
     const savedCart = localStorage.getItem('cart-items')
     if (savedCart) {
       try {
-        items.value = JSON.parse(savedCart)
+        const parsedCart = JSON.parse(savedCart)
+        items.value = parsedCart || []
       } catch (e) {
         console.error('Failed to parse saved cart:', e)
+        items.value = []
       }
     }
+    isInitialized.value = true
   }
 
   const saveToStorage = () => {
@@ -120,6 +127,7 @@ export const useCartStore = defineStore('cart', () => {
     openCart,
     closeCart,
     getItemQuantity,
-    isInCart
+    isInCart,
+    initializeCart
   }
 })

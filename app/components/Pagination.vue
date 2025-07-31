@@ -112,7 +112,7 @@ const props = defineProps({
   }
 })
 
-const emit = defineEmits(['page-change'])
+const emit = defineEmits(['page-change', 'items-per-page-change'])
 
 const totalPages = computed(() =>
   Math.ceil(props.totalItems / props.itemsPerPage)

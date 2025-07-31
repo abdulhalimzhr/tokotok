@@ -146,12 +146,37 @@ export const useAuthStore = defineStore('auth', () => {
 
   const initializeAuth = () => {
     if (import.meta.client) {
-      const savedToken = localStorage.getItem('auth_token')
-      const savedUser = localStorage.getItem('user_data')
+      try {
+        const savedToken = localStorage.getItem('auth_token')
+        const savedUser = localStorage.getItem('user_data')
 
-      if (savedToken && savedUser) {
-        token.value = savedToken
-        user.value = JSON.parse(savedUser)
+        if (savedToken && savedUser) {
+          try {
+            user.value = JSON.parse(savedUser)
+            token.value = savedToken
+          } catch (error) {
+            console.error('Error parsing saved user data:', error)
+            // Clear corrupted data and reset state
+            localStorage.removeItem('auth_token')
+            localStorage.removeItem('user_data')
+            user.value = null
+            token.value = null
+          }
+        }
+      } catch (error) {
+        console.error('Error initializing auth:', error)
+      }
+    }
+  }
+
+  const setToken = (newToken: string | null) => {
+    token.value = newToken
+
+    if (import.meta.client) {
+      if (newToken) {
+        localStorage.setItem('auth_token', newToken)
+      } else {
+        localStorage.removeItem('auth_token')
       }
     }
   }
@@ -166,6 +191,7 @@ export const useAuthStore = defineStore('auth', () => {
     login,
     register,
     logout,
-    initializeAuth
+    initializeAuth,
+    setToken
   }
 })

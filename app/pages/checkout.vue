@@ -215,7 +215,7 @@
               </svg>
               <div>
                 <p class="text-sm font-medium text-red-800 dark:text-red-200">
-                  Insufficient Balance
+                  Insufficient Funds
                 </p>
                 <p class="text-sm text-red-700 dark:text-red-300">
                   You need ${{
@@ -264,7 +264,7 @@
                 (walletStore.balance || 0) < (cartStore.totalPrice || 0)
               "
             >
-              Insufficient Balance
+              Insufficient Funds
             </span>
             <span v-else>
               Complete Purchase {{ cartStore.formattedTotal }}
@@ -428,7 +428,9 @@
 import { toast } from 'vue3-toastify'
 
 // Authentication check
-await useAuthGuard('/checkout', 'Please login to access checkout')
+definePageMeta({
+  middleware: 'auth'
+})
 
 useSeoMeta({
   title: 'Checkout - TokoTok',
@@ -462,7 +464,7 @@ const processOrder = async () => {
   const balance = walletStore.balance || 0
 
   if (cartStore.isEmpty || balance < totalPrice) {
-    toast.error('Cannot process order: insufficient balance or empty cart')
+    toast.error('Cannot process order: funds or empty cart')
     return
   }
 

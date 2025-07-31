@@ -118,7 +118,7 @@ export const useWalletStore = defineStore('wallet', () => {
     }
 
     if (!canAfford(amount)) {
-      throw new Error('Insufficient balance')
+      throw new Error('Insufficient funds')
     }
 
     loading.value = true
