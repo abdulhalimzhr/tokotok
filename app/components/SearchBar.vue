@@ -128,10 +128,11 @@
               Products
             </div>
           </div>
-          <button
+          <NuxtLink
             v-for="(suggestion, index) in suggestions"
             :key="suggestion.id"
-            @click="selectSuggestion(suggestion)"
+            :to="`/product/${suggestion.id}`"
+            @click="showSuggestions = false"
             :class="[
               'w-full text-left px-4 py-3 text-sm hover:bg-gray-100 dark:hover:bg-gray-700 focus:outline-none focus:bg-gray-100 dark:focus:bg-gray-700 flex items-center space-x-3 transition-colors',
               index === selectedSuggestionIndex
@@ -147,10 +148,10 @@
             />
             <div class="flex-1 min-w-0">
               <div class="flex items-center justify-between">
-                <p
-                  class="text-sm font-medium text-gray-900 dark:text-gray-100 truncate"
+                <span
+                  class="text-sm font-medium text-gray-900 dark:text-gray-100 truncate hover:text-green-600 dark:hover:text-green-400 transition-colors duration-200"
                   v-html="highlightMatch(suggestion.title, searchQuery)"
-                ></p>
+                ></span>
                 <span
                   class="text-xs font-semibold text-green-600 dark:text-green-400 ml-2"
                 >
@@ -163,7 +164,28 @@
                 {{ suggestion.category }}
               </p>
             </div>
-          </button>
+            <div class="flex-shrink-0 flex items-center">
+              <button
+                @click.stop="selectSuggestion(suggestion)"
+                class="p-1 text-gray-400 hover:text-gray-600 dark:hover:text-gray-300 rounded-full hover:bg-gray-200 dark:hover:bg-gray-600 transition-colors"
+                title="Use as search term"
+              >
+                <svg
+                  class="w-4 h-4"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="2"
+                    d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
+                  />
+                </svg>
+              </button>
+            </div>
+          </NuxtLink>
         </div>
 
         <!-- No results -->
@@ -316,6 +338,12 @@ const selectSuggestion = product => {
   productsStore.updateSearch(query)
   showSuggestions.value = false
   selectedSuggestionIndex.value = -1
+}
+
+const navigateToProduct = product => {
+  showSuggestions.value = false
+  selectedSuggestionIndex.value = -1
+  navigateTo(`/product/${product.id}`)
 }
 
 const selectRecentSearch = search => {

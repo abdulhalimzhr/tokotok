@@ -1,12 +1,12 @@
 <template>
   <div class="relative">
     <button
-      class="relative p-2.5 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-xl transition-all duration-200 group"
-      @click="isOpen = !isOpen"
+      class="relative py-1 px-3 hover:bg-gray-100 dark:hover:bg-gray-900 rounded-full transition-all duration-200 group"
+      @click="toggleShoppingCart"
     >
       <Icon
         name="heroicons:shopping-cart"
-        class="w-6 h-6 text-gray-700 dark:text-gray-300 group-hover:text-green-600 dark:group-hover:text-green-400 transition-colors duration-200"
+        class="mt-2 w-4 h-4 text-gray-700 dark:text-gray-300 group-hover:text-green-600 dark:group-hover:text-green-400 transition-colors duration-200"
       />
       <span
         v-if="cartStore.itemCount > 0"
@@ -17,8 +17,8 @@
     </button>
 
     <div
-      v-if="isOpen"
-      class="absolute right-0 mt-2 w-80 bg-white border border-gray-200 rounded-lg shadow-xl z-50 dark:bg-gray-800 dark:border-gray-700 animate-in slide-in-from-top-2 duration-100"
+      v-if="isShoppingCartOpen"
+      class="absolute left-auto right-[-2rem] sm:right-0 mt-2 w-80 max-w-[calc(100vw-2rem)] bg-white border border-gray-200 rounded-lg shadow-xl z-50 dark:bg-gray-800 dark:border-gray-700 animate-in slide-in-from-top-2 duration-100"
     >
       <div class="p-4">
         <div class="flex items-center justify-between mb-4">
@@ -38,12 +38,6 @@
               {{ cartStore.itemCount === 1 ? 'item' : 'items' }}
             </span>
           </div>
-          <button
-            class="text-gray-400 hover:text-gray-600 transition-colors duration-200 dark:hover:text-gray-300 p-1 rounded-full hover:bg-gray-100 dark:hover:bg-gray-700"
-            @click="isOpen = false"
-          >
-            <Icon name="heroicons:x-mark" class="w-5 h-5" />
-          </button>
         </div>
 
         <div
@@ -66,7 +60,7 @@
               <NuxtLink
                 :to="`/product/${item.product.id}`"
                 class="block"
-                @click="isOpen = false"
+                @click="closeShoppingCart"
               >
                 <h4
                   class="text-sm font-medium text-gray-900 dark:text-gray-100 group-hover:text-gray-700 dark:group-hover:text-white truncate leading-tight hover:text-green-600 dark:hover:text-green-400 transition-colors duration-200 cursor-pointer"
@@ -157,7 +151,7 @@
             <NuxtLink
               to="/checkout"
               class="block w-full bg-green-600 hover:bg-green-700 text-white py-3 px-4 rounded-lg transition-all duration-200 font-medium text-center text-sm shadow-sm hover:shadow-md transform hover:-translate-y-0.5"
-              @click="isOpen = false"
+              @click="closeShoppingCart"
             >
               <Icon name="heroicons:credit-card" class="w-4 h-4 inline mr-2" />
               Proceed to Checkout
@@ -177,11 +171,12 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue'
 import { useCartStore } from '~/stores/cart'
+import { useDropdownState } from '~/composables/useDropdownState'
 
 const cartStore = useCartStore()
-const isOpen = ref(false)
+const { isShoppingCartOpen, toggleShoppingCart, closeShoppingCart } =
+  useDropdownState()
 
 const handleClearCart = () => {
   if (confirm('Are you sure you want to clear your cart?')) {
@@ -190,8 +185,11 @@ const handleClearCart = () => {
 }
 
 const handleClickOutside = (event: Event) => {
-  if (isOpen.value && !(event.target as Element).closest('.relative')) {
-    isOpen.value = false
+  if (
+    isShoppingCartOpen.value &&
+    !(event.target as Element).closest('.relative')
+  ) {
+    closeShoppingCart()
   }
 }
 

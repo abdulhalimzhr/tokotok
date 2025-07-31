@@ -37,32 +37,32 @@
 </template>
 
 <script setup lang="ts">
-  interface Props {
-    modelValue: boolean;
+interface Props {
+  modelValue: boolean
+}
+
+interface Emits {
+  (e: 'update:modelValue', value: boolean): void
+}
+
+const props = defineProps<Props>()
+const emit = defineEmits<Emits>()
+
+const closeModal = () => {
+  emit('update:modelValue', false)
+}
+
+onMounted(() => {
+  const handleEscape = (e: KeyboardEvent) => {
+    if (e.key === 'Escape' && props.modelValue) {
+      closeModal()
+    }
   }
 
-  interface Emits {
-    (e: 'update:modelValue', value: boolean): void;
-  }
+  document.addEventListener('keydown', handleEscape)
 
-  const props = defineProps<Props>();
-  const emit = defineEmits<Emits>();
-
-  const closeModal = () => {
-    emit('update:modelValue', false);
-  };
-
-  onMounted(() => {
-    const handleEscape = (e: KeyboardEvent) => {
-      if (e.key === 'Escape' && props.modelValue) {
-        closeModal();
-      }
-    };
-
-    document.addEventListener('keydown', handleEscape);
-
-    onUnmounted(() => {
-      document.removeEventListener('keydown', handleEscape);
-    });
-  });
+  onUnmounted(() => {
+    document.removeEventListener('keydown', handleEscape)
+  })
+})
 </script>

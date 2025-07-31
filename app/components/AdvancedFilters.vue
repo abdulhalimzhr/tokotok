@@ -1,8 +1,8 @@
 <template>
   <!-- Filter Toggle Button -->
-  <div class="relative inline-block text-left">
+  <div class="relative inline-block text-left advanced-filters-container">
     <button
-      @click="toggleFilters"
+      @click="toggleAdvancedFilters"
       class="inline-flex items-center justify-center px-3 py-2 text-xs font-medium text-gray-700 dark:text-gray-300 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm hover:bg-gray-50 dark:hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500"
     >
       <Icon
@@ -15,14 +15,14 @@
         name="heroicons:chevron-down"
         :class="[
           'w-3 h-3 sm:w-4 sm:h-4 ml-1 sm:ml-2 transition-transform duration-200',
-          showFilters ? 'rotate-180' : ''
+          isAdvancedFiltersOpen ? 'rotate-180' : ''
         ]"
       />
     </button>
 
     <!-- Dropdown Panel -->
     <div
-      v-if="showFilters"
+      v-if="isAdvancedFiltersOpen"
       class="absolute z-50 mt-2 w-80 bg-white dark:bg-gray-800 rounded-lg shadow-lg border border-gray-200 dark:border-gray-700 p-4 left-auto sm:left-0 max-w-[calc(100vw-2rem)] sm:max-w-none animate-in slide-in-from-top-2 duration-200"
       @click.stop
     >
@@ -36,52 +36,38 @@
               filters.priceRange.max
             }}
           </label>
-          <div class="space-y-3">
-            <div>
+          <div class="flex items-center space-x-3">
+            <div class="flex-1">
               <label
                 class="block text-xs text-gray-500 dark:text-gray-400 mb-1"
               >
-                Minimum Price
+                Min ($)
               </label>
-              <input
-                v-model.number="filters.priceRange.min"
-                type="range"
-                min="0"
-                max="1000"
-                step="10"
-                class="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer dark:bg-gray-700 slider"
-                @input="updateFilters"
-              />
               <input
                 v-model.number="filters.priceRange.min"
                 type="number"
                 min="0"
                 max="1000"
-                class="mt-1 w-full text-xs rounded border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100"
+                step="0.01"
+                placeholder="0.00"
+                class="w-full text-sm rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 px-3 py-2"
                 @input="updateFilters"
               />
             </div>
-            <div>
+            <div class="flex-1">
               <label
                 class="block text-xs text-gray-500 dark:text-gray-400 mb-1"
               >
-                Maximum Price
+                Max ($)
               </label>
-              <input
-                v-model.number="filters.priceRange.max"
-                type="range"
-                min="0"
-                max="1000"
-                step="10"
-                class="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer dark:bg-gray-700 slider"
-                @input="updateFilters"
-              />
               <input
                 v-model.number="filters.priceRange.max"
                 type="number"
                 min="0"
                 max="1000"
-                class="mt-1 w-full text-xs rounded border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100"
+                step="0.01"
+                placeholder="1000.00"
+                class="w-full text-sm rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 px-3 py-2"
                 @input="updateFilters"
               />
             </div>
@@ -137,9 +123,10 @@
 
 <script setup>
 import { useProductsStore } from '~/stores/products'
+import { useDropdownState } from '~/composables/useDropdownState'
 
 const productsStore = useProductsStore()
-const showFilters = ref(false)
+const { isAdvancedFiltersOpen, toggleAdvancedFilters, closeAdvancedFilters } = useDropdownState()
 
 const filters = ref({
   priceRange: { min: 0, max: 1000 },
@@ -153,10 +140,6 @@ onMounted(() => {
     rating: productsStore.searchState.filters.rating
   }
 })
-
-const toggleFilters = () => {
-  showFilters.value = !showFilters.value
-}
 
 const updateFilters = () => {
   // Ensure min doesn't exceed max
@@ -185,8 +168,8 @@ const resetFilters = () => {
 
 // Close dropdown when clicking outside
 const handleClickOutside = event => {
-  if (!event.target.closest('.relative')) {
-    showFilters.value = false
+  if (isAdvancedFiltersOpen.value && !event.target.closest('.advanced-filters-container')) {
+    closeAdvancedFilters()
   }
 }
 

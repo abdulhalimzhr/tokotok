@@ -1,21 +1,18 @@
 <template>
   <div>
     <CategoryFilter />
-    <div
-      class="flex items-center justify-between mb-4 px-2"
-      v-if="productsStore.hasFilteredProducts"
-    >
-      <div class="flex items-center space-x-4">
+    <div class="flex items-center justify-between mb-4 px-2 flex-wrap">
+      <div class="flex items-center space-x-4 mt-2 sm:mt-0">
         <AdvancedFilters />
       </div>
-      <div class="flex items-center space-x-2">
+      <div class="flex items-center space-x-2 mt-2 sm:mt-0">
         <label for="sort-by" class="text-xs text-gray-700 dark:text-gray-200">
           Sort by:
         </label>
         <select
           id="sort-by"
           v-model="sortBy"
-          class="text-xs rounded-md border-gray-300 dark:border-gray-700 bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 focus:ring-blue-500 focus:border-blue-500"
+          class="p-2 text-xs rounded-md border-gray-300 dark:border-gray-700 bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100"
         >
           <option value="name">Name</option>
           <option value="price">Price</option>
@@ -23,7 +20,7 @@
         </select>
         <select
           v-model="sortOrder"
-          class="text-xs rounded-md border-gray-300 dark:border-gray-700 bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 focus:ring-blue-500 focus:border-blue-500"
+          class="p-2 text-xs rounded-md border-gray-300 dark:border-gray-700 bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100"
         >
           <option value="asc">Ascending</option>
           <option value="desc">Descending</option>

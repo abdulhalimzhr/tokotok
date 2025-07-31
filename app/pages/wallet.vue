@@ -270,15 +270,20 @@
 <script setup>
 import { toast } from 'vue3-toastify'
 
+// Authentication check
+await useAuthGuard('/wallet', 'Please login to access your wallet')
+
 useSeoMeta({
   title: 'My Wallet - TokoTok',
   description: 'Manage your wallet balance and view your purchase history.'
 })
 
+const authStore = useAuthStore()
 const cartStore = useCartStore()
 const walletStore = useWalletStore()
 
 onMounted(() => {
+  // Load wallet data
   if (process.client) {
     walletStore.loadFromStorage()
   }
@@ -310,8 +315,13 @@ const totalAdded = computed(() => {
 
 const quickTopUp = async amount => {
   try {
-    await walletStore.topUp(amount, `Quick top-up of $${amount}`)
-    toast.success(`Successfully added $${amount} to your wallet!`)
+    const transaction = await walletStore.topUp(
+      amount,
+      `Quick top-up of $${amount}`
+    )
+    toast.success(
+      `Successfully added $${transaction.amount.toFixed(2)} to your wallet!`
+    )
   } catch (error) {
     toast.error(`Failed to top up wallet: ${error.message}`)
   }
@@ -331,12 +341,14 @@ const handleCustomTopUp = async () => {
   if (!customAmount.value || customAmount.value <= 0) return
 
   try {
-    await walletStore.topUp(
+    const transaction = await walletStore.topUp(
       customAmount.value,
       `Custom top-up of $${customAmount.value}`
     )
     closeTopUpModal()
-    toast.success(`Successfully added $${customAmount.value} to your wallet!`)
+    toast.success(
+      `Successfully added $${transaction.amount.toFixed(2)} to your wallet!`
+    )
   } catch (error) {
     toast.error(`Failed to top up wallet: ${error.message}`)
   }
@@ -365,16 +377,16 @@ const getTransactionIcon = type => {
 }
 
 const getTransactionIconClass = type => {
-  const baseClass = 'p-2 rounded-full'
+  const baseClass = 'px-4 py-3 rounded-full'
   switch (type) {
     case 'topup':
-      return `${baseClass} bg-green-100 dark:bg-green-900 text-green-600 dark:text-green-400`
+      return `${baseClass} bg-green-200 dark:bg-green-900 text-green-600 dark:text-green-400`
     case 'purchase':
-      return `${baseClass} bg-green-100 dark:bg-green-900 text-blue-600 dark:text-blue-400`
+      return `${baseClass} bg-green-200 dark:bg-green-900 text-blue-600 dark:text-blue-400`
     case 'refund':
-      return `${baseClass} bg-yellow-100 dark:bg-yellow-900 text-yellow-600 dark:text-yellow-400`
+      return `${baseClass} bg-yellow-200 dark:bg-yellow-900 text-yellow-600 dark:text-yellow-400`
     default:
-      return `${baseClass} bg-gray-100 dark:bg-gray-700 text-gray-600 dark:text-gray-400`
+      return `${baseClass} bg-gray-200 dark:bg-gray-700 text-gray-600 dark:text-gray-400`
   }
 }
 

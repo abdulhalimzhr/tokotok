@@ -1,8 +1,8 @@
 import { defineStore } from 'pinia'
-import type { Transaction, WalletState } from '~/types'
+import type { Transaction } from '~/types'
 
 export const useWalletStore = defineStore('wallet', () => {
-  const balance = ref(1000)
+  const balance = ref(0)
   const transactions = ref<Transaction[]>([])
   const loading = ref(false)
   const error = ref<string | null>(null)
@@ -28,7 +28,8 @@ export const useWalletStore = defineStore('wallet', () => {
         const savedData = localStorage.getItem('wallet-data')
         if (savedData) {
           const walletData = JSON.parse(savedData)
-          balance.value = walletData.balance || 1000
+          balance.value =
+            walletData.balance !== undefined ? walletData.balance : 1000
           transactions.value = (walletData.transactions || []).map(
             (t: any) => ({
               ...t,

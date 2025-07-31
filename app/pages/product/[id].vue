@@ -156,7 +156,6 @@
               </div>
               <button
                 class="flex-1 px-4 py-2 bg-green-500 text-white rounded-lg font-semibold hover:bg-green-600 transition disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center"
-                :disabled="!walletStore.canAfford(product.price * qty)"
                 @click="addToCart"
               >
                 <Icon name="i-heroicons-shopping-cart" class="w-4 h-4 mr-2" />

@@ -63,7 +63,7 @@
     </NuxtLink>
     <button
       class="absolute bottom-3 right-3 px-2 py-1 text-[10px] font-medium text-white bg-green-500 rounded-md hover:bg-green-600 focus:outline-none focus:ring-2 focus:ring-green-400 disabled:opacity-50 disabled:cursor-not-allowed transition-colors z-10 text-center"
-      :disabled="!walletStore.canAfford(product.price) || addingToCart"
+      :disabled="addingToCart"
       @click.stop="addToCart"
     >
       <span v-if="addingToCart" class="flex items-center justify-center">
@@ -117,16 +117,6 @@ const addToCart = async () => {
       'Authentication Required'
     )
     router.push('/login')
-    return
-  }
-
-  if (!walletStore.canAfford(props.product.price)) {
-    notify.error(
-      `Insufficient funds. You need $${(
-        props.product.price - walletStore.balance
-      ).toFixed(2)} more.`,
-      'Cannot Add to Cart'
-    )
     return
   }
 

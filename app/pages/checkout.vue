@@ -427,6 +427,16 @@
 <script setup lang="ts">
 import { toast } from 'vue3-toastify'
 
+// Authentication check
+await useAuthGuard('/checkout', 'Please login to access checkout')
+
+useSeoMeta({
+  title: 'Checkout - TokoTok',
+  description: 'Complete your purchase'
+})
+
+const authStore = useAuthStore()
+
 const cartStore = useCartStore()
 const walletStore = useWalletStore()
 const router = useRouter()
@@ -497,7 +507,7 @@ const handleTopUp = async () => {
   isTopUpLoading.value = true
 
   try {
-    await walletStore.topUp(
+    const transaction = await walletStore.topUp(
       topUpAmount.value,
       `Checkout top-up of $${topUpAmount.value}`
     )
@@ -505,7 +515,7 @@ const handleTopUp = async () => {
     await nextTick()
     setTimeout(() => {
       toast.success(
-        `Wallet topped up! Added $${topUpAmount.value.toFixed(
+        `Wallet topped up! Added $${transaction.amount.toFixed(
           2
         )} to your wallet`
       )

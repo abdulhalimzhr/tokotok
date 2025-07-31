@@ -141,6 +141,7 @@ useSeoMeta({
 
 const authStore = useAuthStore()
 const router = useRouter()
+const route = useRoute()
 
 const form = ref({
   username: '',
@@ -164,7 +165,9 @@ const handleLogin = async () => {
 
     await new Promise(resolve => setTimeout(resolve, 500))
 
-    await router.push('/')
+    // Redirect to the intended page or home
+    const redirectTo = route.query.redirect || '/'
+    await router.push(redirectTo)
   } catch (err) {
     error.value = err.message || 'Login failed. Please try again.'
   } finally {
@@ -174,7 +177,8 @@ const handleLogin = async () => {
 
 onMounted(() => {
   if (authStore.isAuthenticated) {
-    router.push('/')
+    const redirectTo = route.query.redirect || '/'
+    router.push(redirectTo)
   }
 })
 </script>
