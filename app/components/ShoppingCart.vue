@@ -10,7 +10,7 @@
       />
       <span
         v-if="cartStore.itemCount > 0"
-        class="absolute -top-1 -right-1 bg-green-500 text-white text-xs rounded-full min-w-[20px] h-5 flex items-center justify-center font-medium px-1 shadow-sm animate-pulse"
+        class="cart-count absolute -top-1 -right-1 bg-green-500 text-white text-xs rounded-full min-w-[20px] h-5 flex items-center justify-center font-medium px-1 shadow-sm animate-pulse"
       >
         {{ cartStore.itemCount > 99 ? '99+' : cartStore.itemCount }}
       </span>

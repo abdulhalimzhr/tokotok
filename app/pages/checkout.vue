@@ -239,7 +239,7 @@
               (walletStore.balance || 0) < (cartStore.totalPrice || 0) ||
               isProcessing
             "
-            @click="processOrder"
+            @click="confirmModal"
           >
             <div v-if="isProcessing" class="flex items-center space-x-2">
               <svg class="animate-spin h-5 w-5" fill="none" viewBox="0 0 24 24">
@@ -289,6 +289,58 @@
         </div>
       </div>
     </div>
+
+    <Modal v-model="showConfirmCheckoutModal">
+      <h3 class="text-lg font-semibold text-gray-900 dark:text-white">
+        Confirm Top Up
+      </h3>
+      <div
+        class="bg-white dark:bg-gray-800 rounded-lg p-6 w-full max-w-md mx-4"
+        @click.stop
+      >
+        <div class="space-y-4">
+          <div class="text-center">
+            Are you sure you want to complete this purchase?
+          </div>
+          <div class="flex space-x-3 pt-4">
+            <button
+              class="flex-1 px-4 py-3 text-sm font-medium text-gray-700 dark:text-gray-300 bg-gray-100 dark:bg-gray-600 border border-gray-300 dark:border-gray-600 rounded-lg hover:bg-gray-200 dark:hover:bg-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-500 transition-colors"
+              @click="showConfirmCheckoutModal = false"
+            >
+              Cancel
+            </button>
+            <button
+              class="flex-1 px-4 py-3 text-sm font-medium text-white bg-green-600 border border-transparent rounded-lg hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-blue-500 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+              @click="processOrder"
+            >
+              <div v-if="isProcessing" class="flex items-center space-x-2">
+                <svg
+                  class="animate-spin h-5 w-5"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                >
+                  <circle
+                    class="opacity-25"
+                    cx="12"
+                    cy="12"
+                    r="10"
+                    stroke="currentColor"
+                    stroke-width="4"
+                  />
+                  <path
+                    class="opacity-75"
+                    fill="currentColor"
+                    d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"
+                  />
+                </svg>
+                <span>Processing Order...</span>
+              </div>
+              <span v-else> Confirm </span>
+            </button>
+          </div>
+        </div>
+      </div>
+    </Modal>
 
     <Modal v-model="showTopUpModal">
       <div class="space-y-4">
@@ -443,11 +495,14 @@ const cartStore = useCartStore()
 const walletStore = useWalletStore()
 const router = useRouter()
 
+const { notify } = useNotifications()
+
 const isProcessing = ref(false)
 const showTopUpModal = ref(false)
 const showSuccessModal = ref(false)
 const topUpAmount = ref<number>(0)
 const isTopUpLoading = ref(false)
+const showConfirmCheckoutModal = ref(false)
 
 const quickTopUpAmounts = computed(() => {
   const totalPrice = cartStore.totalPrice || 0
@@ -458,6 +513,20 @@ const quickTopUpAmounts = computed(() => {
 
   return [minNeeded, ...baseAmounts.filter(a => a > minNeeded)].slice(0, 3)
 })
+
+const confirmModal = () => {
+  if ((walletStore.balance || 0) < (cartStore.totalPrice || 0)) {
+    notify.error(
+      `Insufficient funds. You need $${(
+        (cartStore.totalPrice || 0) - (walletStore.balance || 0)
+      ).toFixed(2)} more to complete this purchase.`
+    )
+
+    return
+  }
+
+  showConfirmCheckoutModal.value = true
+}
 
 const processOrder = async () => {
   const totalPrice = cartStore.totalPrice || 0
@@ -506,6 +575,7 @@ const processOrder = async () => {
     toast.error(`Order failed: ${errorMessage}`)
   } finally {
     isProcessing.value = false
+    showConfirmCheckoutModal.value = false
   }
 }
 

@@ -29,7 +29,7 @@
     </div>
     <div
       v-if="productsStore.loading"
-      class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-2 sm:gap-3 md:gap-4 px-2 md:mt-20"
+      class="product-grid-skeleton grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-2 sm:gap-3 md:gap-4 px-2 md:mt-20"
     >
       <ProductCardSkeleton v-for="n in 12" :key="n" />
     </div>
@@ -104,7 +104,7 @@
 
     <div
       v-else
-      class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-2 sm:gap-3 md:gap-4 px-2 md:mt-20"
+      class="product-grid grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-2 sm:gap-3 md:gap-4 px-2 md:mt-20"
     >
       <ProductCard
         v-for="product in paginatedProducts"

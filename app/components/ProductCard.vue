@@ -2,7 +2,7 @@
   <div class="relative group w-full max-w-xs mx-auto">
     <NuxtLink
       :to="`/product/${product.id}`"
-      class="block bg-white dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700 hover:shadow-lg transition-all duration-300 overflow-hidden text-xs"
+      class="product-card block bg-white dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700 hover:shadow-lg transition-all duration-300 overflow-hidden text-xs"
       tabindex="0"
     >
       <div

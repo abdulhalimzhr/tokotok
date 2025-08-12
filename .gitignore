@@ -23,3 +23,8 @@ logs
 .env.*
 !.env.example
 package-lock.json
+
+# Playwright test outputs
+playwright-report
+playwright-results.json
+test-results

@@ -23,7 +23,7 @@
 
     <div class="mt-8 sm:mx-auto sm:w-full sm:max-w-md">
       <div class="bg-white dark:bg-gray-800 p-8 shadow rounded-lg sm:px-10">
-        <form class="space-y-6" @submit.prevent="handleLogin">
+        <form class="space-y-6" @submit.prevent="handleLogin" method="POST">
           <div>
             <label
               for="username"

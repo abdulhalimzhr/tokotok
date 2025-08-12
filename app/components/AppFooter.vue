@@ -56,6 +56,9 @@ onMounted(() => {
   if (theme === 'dark') {
     isDark.value = true
     document.documentElement.classList.add('dark')
+  } else {
+    isDark.value = false
+    document.documentElement.classList.remove('dark')
   }
 })
 </script>

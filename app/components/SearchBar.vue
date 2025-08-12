@@ -134,7 +134,7 @@
             :to="`/product/${suggestion.id}`"
             @click="showSuggestions = false"
             :class="[
-              'w-full text-left px-4 py-3 text-sm hover:bg-gray-100 dark:hover:bg-gray-700 focus:outline-none focus:bg-gray-100 dark:focus:bg-gray-700 flex items-center space-x-3 transition-colors',
+              'suggestion-item w-full text-left px-4 py-3 text-sm hover:bg-gray-100 dark:hover:bg-gray-700 focus:outline-none focus:bg-gray-100 dark:focus:bg-gray-700 flex items-center space-x-3 transition-colors',
               index === selectedSuggestionIndex
                 ? 'bg-gray-100 dark:bg-gray-700'
                 : ''

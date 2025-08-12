@@ -35,12 +35,12 @@
               </div>
               <div class="relative user-menu">
                 <button
-                  class="flex items-center space-x-2 hover:bg-gray-100 dark:hover:bg-gray-800 px-3 py-2.5 rounded-lg transition-all duration-200"
+                  class="user-menu-button flex items-center space-x-2 hover:bg-gray-100 dark:hover:bg-gray-800 px-3 py-2.5 rounded-lg transition-all duration-200"
                   @click="toggleUserMenu"
                 >
                   <template v-if="authStore.isAuthenticated">
                     <span
-                      class="text-sm font-medium text-gray-700 dark:text-gray-200"
+                      class="user-first-name text-sm font-medium text-gray-700 dark:text-gray-200"
                     >
                       {{ authStore.user?.name?.firstname || 'User' }}
                     </span>

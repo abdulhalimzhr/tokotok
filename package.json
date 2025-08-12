@@ -11,7 +11,9 @@
     "test": "vitest",
     "test:watch": "vitest --watch",
     "test:coverage": "vitest --coverage",
-    "test:ui": "vitest --ui"
+    "test:ui": "vitest --ui",
+    "test:e2e": "playwright test",
+    "test:e2e:ui": "playwright test --ui"
   },
   "dependencies": {
     "@nuxt/eslint": "^1.7.1",
@@ -29,6 +31,7 @@
     "lucide-vue-next": "^0.526.0",
     "nuxt": "^4.0.1",
     "pinia": "^3.0.3",
+    "playwright": "^1.54.2",
     "typescript": "^5.8.3",
     "vue": "^3.5.17",
     "vue-router": "^4.5.1",
@@ -36,6 +39,7 @@
   },
   "devDependencies": {
     "@iconify-json/heroicons": "^1.2.2",
+    "@playwright/test": "^1.54.2",
     "@testing-library/jest-dom": "^6.6.4",
     "@testing-library/vue": "^8.1.0",
     "@vue/test-utils": "^2.4.6",
